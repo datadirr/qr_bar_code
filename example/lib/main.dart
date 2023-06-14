@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_bar_code/qr/qr.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,8 +15,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(child: Container()),
+    return MaterialApp(
+      home: Scaffold(
+        body: SafeArea(child: QrImageView(data: "Ronak")),
+      ),
     );
   }
 }
