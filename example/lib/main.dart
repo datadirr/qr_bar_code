@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_bar_code/qr/qr.dart';
+import 'package:qr_bar_code/barcode/barcode.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: SafeArea(child: QRCodeView(data: "https://datadirr.com",)),
+        body: SafeArea(child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: BarcodeWidget(data: "ronak", barcode: Barcode.dataMatrix()),
+        )),
       ),
     );
   }
