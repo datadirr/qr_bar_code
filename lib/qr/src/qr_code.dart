@@ -1,8 +1,6 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:meta/meta.dart';
-
 import 'bit_buffer.dart';
 import 'byte.dart';
 import 'error_correct_level.dart';
@@ -97,7 +95,6 @@ class QrCode {
     _dataCache = null;
   }
 
-  @internal
   List<int> get dataCache =>
       _dataCache ??= _createData(typeNumber, errorCorrectLevel, _dataList);
 }
