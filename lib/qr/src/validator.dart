@@ -1,46 +1,40 @@
-/*
- * QR.Flutter
- * Copyright (c) 2019 the QR.Flutter authors.
- * See LICENSE for distribution and usage details.
- */
-
 import 'error_correct_level.dart';
 import 'input_too_long_exception.dart';
 import 'qr_code.dart';
-import 'qr_versions.dart';
+import 'qr_version.dart';
 
 /// A utility class for validating and pre-rendering QR code data.
-class QrValidator {
+class QRValidator {
   /// Attempt to parse / generate the QR code data and check for any errors. The
-  /// resulting [QrValidationResult] object will hold the status of the QR code
+  /// resulting [QRValidationResult] object will hold the status of the QR code
   /// as well as the generated QR code data.
-  static QrValidationResult validate({
+  static QRValidationResult validate({
     required String data,
-    int version = QrVersions.auto,
-    int errorCorrectionLevel = QrErrorCorrectLevel.L,
+    int version = QRVersion.auto,
+    int errorCorrectionLevel = QRErrorCorrectLevel.L,
   }) {
-    late final QrCode qrCode;
+    late final QRCode qrCode;
     try {
-      if (version != QrVersions.auto) {
-        qrCode = QrCode(version, errorCorrectionLevel);
+      if (version != QRVersion.auto) {
+        qrCode = QRCode(version, errorCorrectionLevel);
         qrCode.addData(data);
       } else {
-        qrCode = QrCode.fromData(
+        qrCode = QRCode.fromData(
           data: data,
           errorCorrectLevel: errorCorrectionLevel,
         );
       }
-      return QrValidationResult(
-        status: QrValidationStatus.valid,
+      return QRValidationResult(
+        status: QRValidationStatus.valid,
         qrCode: qrCode,
       );
     } on InputTooLongException catch (title) {
-      return QrValidationResult(
-        status: QrValidationStatus.contentTooLong,
+      return QRValidationResult(
+        status: QRValidationStatus.contentTooLong,
         error: title,
       );
     } on Exception catch (ex) {
-      return QrValidationResult(status: QrValidationStatus.error, error: ex);
+      return QRValidationResult(status: QRValidationStatus.error, error: ex);
     }
   }
 }
@@ -49,25 +43,25 @@ class QrValidator {
 /// rendered and validated data / object so that it can be used in any
 /// secondary operations (to avoid re-rendering). It also keeps any exception
 /// that was thrown.
-class QrValidationResult {
+class QRValidationResult {
   /// Create a new validation result instance.
-  QrValidationResult({required this.status, this.qrCode, this.error});
+  QRValidationResult({required this.status, this.qrCode, this.error});
 
   /// The status of the validation operation.
-  QrValidationStatus status;
+  QRValidationStatus status;
 
   /// The rendered QR code data / object.
-  QrCode? qrCode;
+  QRCode? qrCode;
 
   /// The exception that was thrown in the event of a non-valid result (if any).
   Exception? error;
 
   /// The validation result returned a status of valid;
-  bool get isValid => status == QrValidationStatus.valid;
+  bool get isValid => status == QRValidationStatus.valid;
 }
 
 /// The status of the QR code data you requested to be validated.
-enum QrValidationStatus {
+enum QRValidationStatus {
   /// The QR code data is valid for the provided parameters.
   valid,
 
@@ -77,5 +71,5 @@ enum QrValidationStatus {
 
   /// An unknown / unexpected error occurred when we tried to validate the QR
   /// code data.
-  error,
+  error
 }

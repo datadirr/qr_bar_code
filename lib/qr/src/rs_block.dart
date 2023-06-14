@@ -1,17 +1,17 @@
 import 'error_correct_level.dart';
 
-class QrRsBlock {
+class QRRSBlock {
   final int totalCount;
   final int dataCount;
 
-  QrRsBlock._(this.totalCount, this.dataCount);
+  QRRSBlock._(this.totalCount, this.dataCount);
 
-  static List<QrRsBlock> getRSBlocks(int typeNumber, int errorCorrectLevel) {
+  static List<QRRSBlock> getRSBlocks(int typeNumber, int errorCorrectLevel) {
     final rsBlock = _getRsBlockTable(typeNumber, errorCorrectLevel);
 
     final length = rsBlock.length ~/ 3;
 
-    final list = <QrRsBlock>[];
+    final list = <QRRSBlock>[];
 
     for (var i = 0; i < length; i++) {
       final count = rsBlock[i * 3 + 0];
@@ -19,7 +19,7 @@ class QrRsBlock {
       final dataCount = rsBlock[i * 3 + 2];
 
       for (var j = 0; j < count; j++) {
-        list.add(QrRsBlock._(totalCount, dataCount));
+        list.add(QRRSBlock._(totalCount, dataCount));
       }
     }
 
@@ -29,10 +29,10 @@ class QrRsBlock {
 
 List<int> _getRsBlockTable(int typeNumber, int errorCorrectLevel) =>
     switch (errorCorrectLevel) {
-      QrErrorCorrectLevel.L => _rsBlockTable[(typeNumber - 1) * 4 + 0],
-      QrErrorCorrectLevel.M => _rsBlockTable[(typeNumber - 1) * 4 + 1],
-      QrErrorCorrectLevel.Q => _rsBlockTable[(typeNumber - 1) * 4 + 2],
-      QrErrorCorrectLevel.H => _rsBlockTable[(typeNumber - 1) * 4 + 3],
+      QRErrorCorrectLevel.L => _rsBlockTable[(typeNumber - 1) * 4 + 0],
+      QRErrorCorrectLevel.M => _rsBlockTable[(typeNumber - 1) * 4 + 1],
+      QRErrorCorrectLevel.Q => _rsBlockTable[(typeNumber - 1) * 4 + 2],
+      QRErrorCorrectLevel.H => _rsBlockTable[(typeNumber - 1) * 4 + 3],
       _ => throw ArgumentError(
           'bad rs block @ typeNumber: $typeNumber/errorCorrectLevel:$errorCorrectLevel',
         )

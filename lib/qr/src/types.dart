@@ -1,15 +1,9 @@
-/*
- * QR.Flutter
- * Copyright (c) 2019 the QR.Flutter authors.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:flutter/widgets.dart';
 
 /// Represents a specific element / part of a QR code. This is used to isolate
 /// the different parts so that we can style and modify specific parts
 /// independently.
-enum QrCodeElement {
+enum QRCodeElement {
   /// The 'stroke' / outer square of the QR code finder pattern element.
   finderPatternOuter,
 
@@ -39,7 +33,7 @@ enum FinderPatternPosition {
 }
 
 /// Enumeration representing the finder pattern eye's shape.
-enum QrEyeShape {
+enum QREyeShape {
   /// Use square eye frame.
   square,
 
@@ -48,7 +42,7 @@ enum QrEyeShape {
 }
 
 /// Enumeration representing the shape of Data modules inside QR.
-enum QrDataModuleShape {
+enum QRDataModuleShape {
   /// Use square dots.
   square,
 
@@ -58,12 +52,12 @@ enum QrDataModuleShape {
 
 /// Styling options for finder pattern eye.
 @immutable
-class QrEyeStyle {
+class QREyeStyle {
   /// Create a new set of styling options for QR Eye.
-  const QrEyeStyle({this.eyeShape, this.color});
+  const QREyeStyle({this.eyeShape, this.color});
 
   /// Eye shape.
-  final QrEyeShape? eyeShape;
+  final QREyeShape? eyeShape;
 
   /// Color to tint the eye.
   final Color? color;
@@ -73,7 +67,7 @@ class QrEyeStyle {
 
   @override
   bool operator ==(Object other) {
-    if (other is QrEyeStyle) {
+    if (other is QREyeStyle) {
       return eyeShape == other.eyeShape && color == other.color;
     }
     return false;
@@ -82,15 +76,15 @@ class QrEyeStyle {
 
 /// Styling options for data module.
 @immutable
-class QrDataModuleStyle {
+class QRDataModuleStyle {
   /// Create a new set of styling options for data modules.
-  const QrDataModuleStyle({
+  const QRDataModuleStyle({
     this.dataModuleShape,
     this.color,
   });
 
   /// Eye shape.
-  final QrDataModuleShape? dataModuleShape;
+  final QRDataModuleShape? dataModuleShape;
 
   /// Color to tint the data modules.
   final Color? color;
@@ -100,7 +94,7 @@ class QrDataModuleStyle {
 
   @override
   bool operator ==(Object other) {
-    if (other is QrDataModuleStyle) {
+    if (other is QRDataModuleStyle) {
       return dataModuleShape == other.dataModuleShape && color == other.color;
     }
     return false;
@@ -109,9 +103,9 @@ class QrDataModuleStyle {
 
 /// Styling options for any embedded image overlay
 @immutable
-class QrEmbeddedImageStyle {
+class QREmbeddedImageStyle {
   /// Create a new set of styling options.
-  const QrEmbeddedImageStyle({
+  const QREmbeddedImageStyle({
     this.size,
     this.color,
   });
@@ -132,7 +126,7 @@ class QrEmbeddedImageStyle {
 
   @override
   bool operator ==(Object other) {
-    if (other is QrEmbeddedImageStyle) {
+    if (other is QREmbeddedImageStyle) {
       return size == other.size && color == other.color;
     }
     return false;

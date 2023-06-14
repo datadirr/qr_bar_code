@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
-
 import 'bit_buffer.dart';
 import 'byte.dart';
 import 'error_correct_level.dart';
@@ -10,24 +9,24 @@ import 'mode.dart' as qr_mode;
 import 'polynomial.dart';
 import 'rs_block.dart';
 
-class QrCode {
+class QRCode {
   final int typeNumber;
   final int errorCorrectLevel;
   final int moduleCount;
   List<int>? _dataCache;
-  final _dataList = <QrDatum>[];
+  final _dataList = <QRDatum>[];
 
-  QrCode(this.typeNumber, this.errorCorrectLevel)
+  QRCode(this.typeNumber, this.errorCorrectLevel)
       : moduleCount = typeNumber * 4 + 17 {
     RangeError.checkValueInInterval(typeNumber, 1, 40, 'typeNumber');
     RangeError.checkValidIndex(
       errorCorrectLevel,
-      QrErrorCorrectLevel.levels,
+      QRErrorCorrectLevel.levels,
       'errorCorrectLevel',
     );
   }
 
-  factory QrCode.fromData({
+  factory QRCode.fromData({
     required String data,
     required int errorCorrectLevel,
   }) {
@@ -35,10 +34,10 @@ class QrCode {
       errorCorrectLevel,
       [QrByte(data)],
     );
-    return QrCode(typeNumber, errorCorrectLevel)..addData(data);
+    return QRCode(typeNumber, errorCorrectLevel)..addData(data);
   }
 
-  factory QrCode.fromUint8List({
+  factory QRCode.fromUint8List({
     required Uint8List data,
     required int errorCorrectLevel,
   }) {
@@ -46,19 +45,19 @@ class QrCode {
       errorCorrectLevel,
       [QrByte.fromUint8List(data)],
     );
-    return QrCode(typeNumber, errorCorrectLevel)
+    return QRCode(typeNumber, errorCorrectLevel)
       .._addToList(QrByte.fromUint8List(data));
   }
 
   static int _calculateTypeNumberFromData(
     int errorCorrectLevel,
-    List<QrDatum> dataList,
+    List<QRDatum> dataList,
   ) {
     int typeNumber;
     for (typeNumber = 1; typeNumber < 40; typeNumber++) {
-      final rsBlocks = QrRsBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+      final rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
 
-      final buffer = QrBitBuffer();
+      final buffer = QRBitBuffer();
       var totalDataCount = 0;
       for (var i = 0; i < rsBlocks.length; i++) {
         totalDataCount += rsBlocks[i].dataCount;
@@ -90,7 +89,7 @@ class QrCode {
   void addAlphaNumeric(String alphaNumeric) =>
       _addToList(QrAlphaNumeric.fromString(alphaNumeric));
 
-  void _addToList(QrDatum data) {
+  void _addToList(QRDatum data) {
     _dataList.add(data);
     _dataCache = null;
   }
@@ -105,11 +104,11 @@ const int _pad1 = 0x11;
 List<int> _createData(
   int typeNumber,
   int errorCorrectLevel,
-  List<QrDatum> dataList,
+  List<QRDatum> dataList,
 ) {
-  final rsBlocks = QrRsBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+  final rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
 
-  final buffer = QrBitBuffer();
+  final buffer = QRBitBuffer();
 
   for (var i = 0; i < dataList.length; i++) {
     final data = dataList[i];
@@ -119,8 +118,6 @@ List<int> _createData(
     data.write(buffer);
   }
 
-  // HUH?
-  // ç≈ëÂÉfÅ[É^êîÇåvéZ
   var totalDataCount = 0;
   for (var i = 0; i < rsBlocks.length; i++) {
     totalDataCount += rsBlocks[i].dataCount;
@@ -131,8 +128,6 @@ List<int> _createData(
     throw InputTooLongException(buffer.length, totalByteCount);
   }
 
-  // HUH?
-  // èIí[ÉRÅ[Éh
   if (buffer.length + 4 <= totalByteCount) {
     buffer.put(0, 4);
   }
@@ -155,7 +150,7 @@ List<int> _createData(
   return _createBytes(buffer, rsBlocks);
 }
 
-List<int> _createBytes(QrBitBuffer buffer, List<QrRsBlock> rsBlocks) {
+List<int> _createBytes(QRBitBuffer buffer, List<QRRSBlock> rsBlocks) {
   var offset = 0;
 
   var maxDcCount = 0;
@@ -179,7 +174,7 @@ List<int> _createBytes(QrBitBuffer buffer, List<QrRsBlock> rsBlocks) {
     offset += dcCount;
 
     final rsPoly = _errorCorrectPolynomial(ecCount);
-    final rawPoly = QrPolynomial(dcItem, rsPoly.length - 1);
+    final rawPoly = QRPolynomial(dcItem, rsPoly.length - 1);
 
     final modPoly = rawPoly.mod(rsPoly);
     final ecItem = ecData[r] = Uint8List(rsPoly.length - 1);
@@ -244,11 +239,11 @@ int _lengthInBits(int mode, int type) {
   }
 }
 
-QrPolynomial _errorCorrectPolynomial(int errorCorrectLength) {
-  var a = QrPolynomial([1], 0);
+QRPolynomial _errorCorrectPolynomial(int errorCorrectLength) {
+  var a = QRPolynomial([1], 0);
 
   for (var i = 0; i < errorCorrectLength; i++) {
-    a = a.multiply(QrPolynomial([1, qr_math.gexp(i)], 0));
+    a = a.multiply(QRPolynomial([1, qr_math.gexp(i)], 0));
   }
 
   return a;

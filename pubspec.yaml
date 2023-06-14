@@ -1,8 +1,8 @@
 name: qr_bar_code
-description: A QR (Quick Response) code is a type of two dimensional (2D) bar code that is used to provide easy access to online information through the digital camera on a smartphone.
+description: Simple and fast QR code and Barcode generator and scanner with smartphones.
 repository: https://github.com/datadirr/qr_bar_code.git
 homepage: https://datadirr.com
-version: 0.0.1
+version: 1.0.0
 
 environment:
   sdk: '>=3.0.3 <4.0.0'

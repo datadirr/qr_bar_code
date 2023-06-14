@@ -4,13 +4,13 @@ import 'dart:typed_data';
 import 'bit_buffer.dart';
 import 'mode.dart' as qr_mode;
 
-abstract class QrDatum {
+abstract class QRDatum {
   int get mode;
   int get length;
-  void write(QrBitBuffer buffer);
+  void write(QRBitBuffer buffer);
 }
 
-class QrByte implements QrDatum {
+class QrByte implements QRDatum {
   @override
   final int mode = qr_mode.mode8bitByte;
   final Uint8List _data;
@@ -27,7 +27,7 @@ class QrByte implements QrDatum {
   int get length => _data.length;
 
   @override
-  void write(QrBitBuffer buffer) {
+  void write(QRBitBuffer buffer) {
     for (final v in _data) {
       buffer.put(v, 8);
     }
@@ -35,7 +35,7 @@ class QrByte implements QrDatum {
 }
 
 /// Encodes numbers (0-9) 10 bits per 3 digits.
-class QrNumeric implements QrDatum {
+class QrNumeric implements QRDatum {
   factory QrNumeric.fromString(String numberString) {
     final newList = Uint8List(numberString.length);
     var count = 0;
@@ -56,7 +56,7 @@ class QrNumeric implements QrDatum {
   final int mode = qr_mode.modeNumber;
 
   @override
-  void write(QrBitBuffer buffer) {
+  void write(QRBitBuffer buffer) {
     // Walk through the list of number; attempting to encode up to 3 at a time.
     // Write (N *3 + 1) bits.
     final leftOver = _data.length % 3;
@@ -81,7 +81,7 @@ class QrNumeric implements QrDatum {
 }
 
 /// Encodes numbers (0-9) 10 bits per 3 digits.
-class QrAlphaNumeric implements QrDatum {
+class QrAlphaNumeric implements QRDatum {
   static const alphaNumTable = r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:';
   // Note: '-' anywhere in this string is a range character.
   static final validationRegex =
@@ -111,7 +111,7 @@ class QrAlphaNumeric implements QrDatum {
   final int mode = qr_mode.modeAlphaNum;
 
   @override
-  void write(QrBitBuffer buffer) {
+  void write(QRBitBuffer buffer) {
     // Walk through the list of number; attempting to encode up to 2 at a time.
     // Write (N *5 + 1) bits.
     final leftOver = _string.length % 2;

@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
-
 import 'error_correct_level.dart';
 import 'qr_code.dart';
 import 'qr_painter.dart';
-import 'qr_versions.dart';
+import 'qr_version.dart';
 import 'types.dart';
 import 'validator.dart';
 
@@ -20,61 +18,61 @@ class QRCodeView extends StatefulWidget {
     this.size,
     this.padding = const EdgeInsets.all(10.0),
     this.backgroundColor = Colors.transparent,
-    this.version = QrVersions.auto,
-    this.errorCorrectionLevel = QrErrorCorrectLevel.L,
+    this.version = QRVersion.auto,
+    this.errorCorrectionLevel = QRErrorCorrectLevel.L,
     this.errorStateBuilder,
     this.constrainErrorBounds = true,
     this.gapless = true,
     this.embeddedImage,
     this.embeddedImageStyle,
     this.semanticsLabel = 'qr code',
-    this.eyeStyle = const QrEyeStyle(
-      eyeShape: QrEyeShape.square,
+    this.eyeStyle = const QREyeStyle(
+      eyeShape: QREyeShape.square,
       color: Colors.black,
     ),
-    this.dataModuleStyle = const QrDataModuleStyle(
-      dataModuleShape: QrDataModuleShape.square,
+    this.dataModuleStyle = const QRDataModuleStyle(
+      dataModuleShape: QRDataModuleShape.square,
       color: Colors.black,
     ),
     this.embeddedImageEmitsError = false,
     @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
         this.foregroundColor,
   })  : assert(
-          QrVersions.isSupportedVersion(version),
+          QRVersion.isSupportedVersion(version),
           'QR code version $version is not supported',
         ),
         _data = data,
         _qrCode = null;
 
-  /// Create a new QR code using the [QrCode] data and the passed options (or
+  /// Create a new QR code using the [QRCode] data and the passed options (or
   /// using the default options).
   QRCodeView.withQr({
-    required QrCode qr,
+    required QRCode qr,
     super.key,
     this.size,
     this.padding = const EdgeInsets.all(10.0),
     this.backgroundColor = Colors.transparent,
-    this.version = QrVersions.auto,
-    this.errorCorrectionLevel = QrErrorCorrectLevel.L,
+    this.version = QRVersion.auto,
+    this.errorCorrectionLevel = QRErrorCorrectLevel.L,
     this.errorStateBuilder,
     this.constrainErrorBounds = true,
     this.gapless = true,
     this.embeddedImage,
     this.embeddedImageStyle,
     this.semanticsLabel = 'qr code',
-    this.eyeStyle = const QrEyeStyle(
-      eyeShape: QrEyeShape.square,
+    this.eyeStyle = const QREyeStyle(
+      eyeShape: QREyeShape.square,
       color: Colors.black,
     ),
-    this.dataModuleStyle = const QrDataModuleStyle(
-      dataModuleShape: QrDataModuleShape.square,
+    this.dataModuleStyle = const QRDataModuleStyle(
+      dataModuleShape: QRDataModuleShape.square,
       color: Colors.black,
     ),
     this.embeddedImageEmitsError = false,
     @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
         this.foregroundColor,
   })  : assert(
-          QrVersions.isSupportedVersion(version),
+          QRVersion.isSupportedVersion(version),
           'QR code version $version is not supported',
         ),
         _data = null,
@@ -84,7 +82,7 @@ class QRCodeView extends StatefulWidget {
   final String? _data;
 
   // The QR code data passed to the widget
-  final QrCode? _qrCode;
+  final QRCode? _qrCode;
 
   /// The background color of the final QR code widget.
   final Color backgroundColor;
@@ -104,7 +102,7 @@ class QRCodeView extends StatefulWidget {
   /// The callback that is executed in the event of an error so that you can
   /// interrogate the exception and construct an alternative view to present
   /// to your user.
-  final QrErrorBuilder? errorStateBuilder;
+  final QRErrorBuilder? errorStateBuilder;
 
   /// If `true` then the error widget will be constrained to the boundary of the
   /// QR widget if it had been valid. If `false` the error widget will grow to
@@ -124,7 +122,7 @@ class QRCodeView extends StatefulWidget {
   final ImageProvider? embeddedImage;
 
   /// Styling options for the image overlay.
-  final QrEmbeddedImageStyle? embeddedImageStyle;
+  final QREmbeddedImageStyle? embeddedImageStyle;
 
   /// If set to true and there is an error loading the embedded image, the
   /// [errorStateBuilder] callback will be called (if it is defined). If false,
@@ -138,13 +136,13 @@ class QRCodeView extends StatefulWidget {
   final String semanticsLabel;
 
   /// Styling option for QR Eye ball and frame.
-  final QrEyeStyle eyeStyle;
+  final QREyeStyle eyeStyle;
 
   /// Styling option for QR data module.
-  final QrDataModuleStyle dataModuleStyle;
+  final QRDataModuleStyle dataModuleStyle;
 
   /// The foreground color of the final QR code widget.
-  @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
+  /*@Deprecated('use colors in eyeStyle and dataModuleStyle instead')*/
   final Color? foregroundColor;
 
   @override
@@ -153,15 +151,15 @@ class QRCodeView extends StatefulWidget {
 
 class _QRCodeViewState extends State<QRCodeView> {
   /// The QR code string data.
-  QrCode? _qr;
+  QRCode? _qr;
 
   /// The current validation status.
-  late QrValidationResult _validationResult;
+  late QRValidationResult _validationResult;
 
   @override
   Widget build(BuildContext context) {
     if (widget._data != null) {
-      _validationResult = QrValidator.validate(
+      _validationResult = QRValidator.validate(
         data: widget._data!,
         version: widget.version,
         errorCorrectionLevel: widget.errorCorrectionLevel,
@@ -170,7 +168,7 @@ class _QRCodeViewState extends State<QRCodeView> {
     } else if (widget._qrCode != null) {
       _qr = widget._qrCode;
       _validationResult =
-          QrValidationResult(status: QrValidationStatus.valid, qrCode: _qr);
+          QRValidationResult(status: QRValidationStatus.valid, qrCode: _qr);
     }
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -210,7 +208,7 @@ class _QRCodeViewState extends State<QRCodeView> {
   }
 
   Widget _qrWidget(ui.Image? image, double edgeLength) {
-    final painter = QrPainter.withQr(
+    final painter = QRPainter.withQr(
       qr: _qr!,
       // ignore: deprecated_member_use_from_same_package
       color: widget.foregroundColor,
@@ -253,7 +251,7 @@ class _QRCodeViewState extends State<QRCodeView> {
 
   Future<ui.Image> _loadQrImage(
     BuildContext buildContext,
-    QrEmbeddedImageStyle? style,
+    QREmbeddedImageStyle? style,
   ) {
     if (style != null) {}
 
@@ -282,7 +280,7 @@ class _QRCodeViewState extends State<QRCodeView> {
 
 /// A function type to be called when any form of error occurs while
 /// painting a [QRCodeView].
-typedef QrErrorBuilder = Widget Function(BuildContext context, Object? error);
+typedef QRErrorBuilder = Widget Function(BuildContext context, Object? error);
 
 class _QrContentView extends StatelessWidget {
   const _QrContentView({

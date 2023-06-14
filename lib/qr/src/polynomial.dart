@@ -1,11 +1,10 @@
 import 'dart:typed_data';
-
 import 'math.dart' as qr_math;
 
-class QrPolynomial {
+class QRPolynomial {
   final Uint8List _values;
 
-  factory QrPolynomial(List<int> thing, int shift) {
+  factory QRPolynomial(List<int> thing, int shift) {
     var offset = 0;
 
     while (offset < thing.length && thing[offset] == 0) {
@@ -18,16 +17,16 @@ class QrPolynomial {
       values[i] = thing[i + offset];
     }
 
-    return QrPolynomial._internal(values);
+    return QRPolynomial._internal(values);
   }
 
-  QrPolynomial._internal(this._values);
+  QRPolynomial._internal(this._values);
 
   int operator [](int index) => _values[index];
 
   int get length => _values.length;
 
-  QrPolynomial multiply(QrPolynomial e) {
+  QRPolynomial multiply(QRPolynomial e) {
     final List<int> foo = Uint8List(length + e.length - 1);
 
     for (var i = 0; i < length; i++) {
@@ -36,10 +35,10 @@ class QrPolynomial {
       }
     }
 
-    return QrPolynomial(foo, 0);
+    return QRPolynomial(foo, 0);
   }
 
-  QrPolynomial mod(QrPolynomial e) {
+  QRPolynomial mod(QRPolynomial e) {
     if (length - e.length < 0) {
       // ignore: avoid_returning_this
       return this;
@@ -58,6 +57,6 @@ class QrPolynomial {
     }
 
     // recursive call
-    return QrPolynomial(value, 0).mod(e);
+    return QRPolynomial(value, 0).mod(e);
   }
 }

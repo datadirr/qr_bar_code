@@ -1,11 +1,4 @@
-/*
- * QR.Flutter
- * Copyright (c) 2019 the QR.Flutter authors.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:flutter/widgets.dart';
-
 import 'types.dart';
 
 /// Caches painter objects so we do have to recreate them and waste expensive
@@ -14,7 +7,7 @@ class PaintCache {
   final List<Paint> _pixelPaints = <Paint>[];
   final Map<String, Paint> _keyedPaints = <String, Paint>{};
 
-  String _cacheKey(QrCodeElement element, {FinderPatternPosition? position}) {
+  String _cacheKey(QRCodeElement element, {FinderPatternPosition? position}) {
     final posKey = position != null ? position.toString() : 'any';
     return '$element:$posKey';
   }
@@ -22,10 +15,10 @@ class PaintCache {
   /// Save a [Paint] for the provided element and position into the cache.
   void cache(
     Paint paint,
-    QrCodeElement element, {
+    QRCodeElement element, {
     FinderPatternPosition? position,
   }) {
-    if (element == QrCodeElement.codePixel) {
+    if (element == QRCodeElement.codePixel) {
       _pixelPaints.add(paint);
     } else {
       _keyedPaints[_cacheKey(element, position: position)] = paint;
@@ -34,8 +27,8 @@ class PaintCache {
 
   /// Retrieve the first [Paint] object from the paint cache for the provided
   /// element and position.
-  Paint? firstPaint(QrCodeElement element, {FinderPatternPosition? position}) {
-    return element == QrCodeElement.codePixel
+  Paint? firstPaint(QRCodeElement element, {FinderPatternPosition? position}) {
+    return element == QRCodeElement.codePixel
         ? _pixelPaints.first
         : _keyedPaints[_cacheKey(element, position: position)];
   }
@@ -45,10 +38,10 @@ class PaintCache {
   /// one [Paint] object per position. As such they will always return a [List]
   /// with a fixed size of `1`.
   List<Paint?> paints(
-    QrCodeElement element, {
+    QRCodeElement element, {
     FinderPatternPosition? position,
   }) {
-    return element == QrCodeElement.codePixel
+    return element == QRCodeElement.codePixel
         ? _pixelPaints
         : <Paint?>[_keyedPaints[_cacheKey(element, position: position)]];
   }

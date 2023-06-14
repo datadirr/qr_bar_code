@@ -1,10 +1,10 @@
 import 'dart:collection';
 
-class QrBitBuffer extends Object with ListMixin<bool> {
+class QRBitBuffer extends Object with ListMixin<bool> {
   final List<int> _buffer;
   int _length = 0;
 
-  QrBitBuffer() : _buffer = <int>[];
+  QRBitBuffer() : _buffer = <int>[];
 
   @override
   void operator []=(int index, bool value) =>

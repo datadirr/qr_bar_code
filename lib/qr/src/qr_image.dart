@@ -1,11 +1,10 @@
-import 'package:meta/meta.dart';
-
+import 'package:flutter/foundation.dart';
 import 'mask_pattern.dart' as qr_mask_pattern;
 import 'qr_code.dart';
 import 'util.dart' as qr_util;
 
-/// Renders the encoded data from a [QrCode] in a portable format.
-class QrImage {
+/// Renders the encoded data from a [QRCode] in a portable format.
+class QRImage {
   final int moduleCount;
   final int typeNumber;
   final int errorCorrectLevel;
@@ -14,12 +13,12 @@ class QrImage {
   final _modules = <List<bool?>>[];
 
   /// Generates a QrImage with the best mask pattern encoding [qrCode].
-  factory QrImage(QrCode qrCode) {
+  factory QRImage(QRCode qrCode) {
     var minLostPoint = 0.0;
-    QrImage? bestImage;
+    QRImage? bestImage;
 
     for (var i = 0; i < 8; i++) {
-      final testImage = QrImage._test(qrCode, i);
+      final testImage = QRImage._test(qrCode, i);
       final lostPoint = _lostPoint(testImage);
 
       if (i == 0 || minLostPoint > lostPoint) {
@@ -28,11 +27,11 @@ class QrImage {
       }
     }
 
-    return QrImage.withMaskPattern(qrCode, bestImage!.maskPattern);
+    return QRImage.withMaskPattern(qrCode, bestImage!.maskPattern);
   }
 
   /// Generates a specific image for the [qrCode] and [maskPattern].
-  QrImage.withMaskPattern(QrCode qrCode, this.maskPattern)
+  QRImage.withMaskPattern(QRCode qrCode, this.maskPattern)
       : assert(maskPattern >= 0 && maskPattern <= 7),
         moduleCount = qrCode.moduleCount,
         typeNumber = qrCode.typeNumber,
@@ -40,7 +39,7 @@ class QrImage {
     _makeImpl(maskPattern, qrCode.dataCache, false);
   }
 
-  QrImage._test(QrCode qrCode, this.maskPattern)
+  QRImage._test(QRCode qrCode, this.maskPattern)
       : moduleCount = qrCode.moduleCount,
         typeNumber = qrCode.typeNumber,
         errorCorrectLevel = qrCode.errorCorrectLevel {
@@ -248,7 +247,7 @@ bool _mask(int maskPattern, int i, int j) => switch (maskPattern) {
       _ => throw ArgumentError('bad maskPattern:$maskPattern')
     };
 
-double _lostPoint(QrImage qrImage) {
+double _lostPoint(QRImage qrImage) {
   final moduleCount = qrImage.moduleCount;
 
   var lostPoint = 0.0;
