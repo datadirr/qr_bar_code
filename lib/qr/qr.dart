@@ -5,8 +5,8 @@ export 'src/qr_code.dart';
 export 'src/qr_image.dart';
 
 export 'src/errors.dart';
-export 'src/qr_image_view.dart';
 export 'src/qr_painter.dart';
 export 'src/qr_versions.dart';
 export 'src/types.dart';
 export 'src/validator.dart';
+export 'src/qr_code_view.dart';

@@ -1,9 +1,3 @@
-/*
- * QR.Flutter
- * Copyright (c) 2019 the QR.Flutter authors.
- * See LICENSE for distribution and usage details.
- */
-
 import 'dart:async';
 import 'dart:ui' as ui;
 
@@ -17,10 +11,10 @@ import 'types.dart';
 import 'validator.dart';
 
 /// A widget that shows a QR code.
-class QrImageView extends StatefulWidget {
+class QRCodeView extends StatefulWidget {
   /// Create a new QR code using the [String] data and the passed options (or
   /// using the default options).
-  QrImageView({
+  QRCodeView({
     required String data,
     super.key,
     this.size,
@@ -54,7 +48,7 @@ class QrImageView extends StatefulWidget {
 
   /// Create a new QR code using the [QrCode] data and the passed options (or
   /// using the default options).
-  QrImageView.withQr({
+  QRCodeView.withQr({
     required QrCode qr,
     super.key,
     this.size,
@@ -154,10 +148,10 @@ class QrImageView extends StatefulWidget {
   final Color? foregroundColor;
 
   @override
-  State<QrImageView> createState() => _QrImageViewState();
+  State<QRCodeView> createState() => _QRCodeViewState();
 }
 
-class _QrImageViewState extends State<QrImageView> {
+class _QRCodeViewState extends State<QRCodeView> {
   /// The QR code string data.
   QrCode? _qr;
 
@@ -287,7 +281,7 @@ class _QrImageViewState extends State<QrImageView> {
 }
 
 /// A function type to be called when any form of error occurs while
-/// painting a [QrImageView].
+/// painting a [QRCodeView].
 typedef QrErrorBuilder = Widget Function(BuildContext context, Object? error);
 
 class _QrContentView extends StatelessWidget {

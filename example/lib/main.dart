@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: SafeArea(child: QrImageView(data: "Ronak")),
+        body: SafeArea(child: QRCodeView(data: "https://datadirr.com",)),
       ),
     );
   }
