@@ -7,7 +7,6 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockQrBarCodePlatform
     with MockPlatformInterfaceMixin
     implements QrBarCodePlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 }
