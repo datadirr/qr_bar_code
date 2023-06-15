@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_bar_code/code/code_generate.dart';
+import 'package:qr_bar_code/code/code.dart';
+import 'package:qr_bar_code/qr/qr.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,7 +38,8 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            CodeGenerate(data: "https://datadirr.com", code: Code.qrCode()),
+            QRCode(data: "https://datadirr.com"),
+            Code(data: "https://datadirr.com", codeType: CodeType.qrCode()),
           ],
         ),
       )),

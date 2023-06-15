@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'error_correct_level.dart';
 import 'errors.dart';
 import 'paint_cache.dart';
-import 'qr_code.dart';
+import 'qr_code_generate.dart';
 import 'qr_image.dart';
 import 'qr_version.dart';
 import 'types.dart';
@@ -47,11 +47,11 @@ class QRPainter extends CustomPainter {
     _init(data);
   }
 
-  /// Create a new QrPainter with a pre-validated/created [QRCode] object. This
+  /// Create a new QrPainter with a pre-validated/created [QRCodeGenerate] object. This
   /// constructor is useful when you have a custom validation / error handling
   /// flow or for when you need to pre-validate the QR data.
   QRPainter.withQr({
-    required QRCode qr,
+    required QRCodeGenerate qr,
     this.gapless = false,
     this.embeddedImage,
     this.embeddedImageStyle,
@@ -100,7 +100,7 @@ class QRPainter extends CustomPainter {
   final QRDataModuleStyle dataModuleStyle;
 
   /// The base QR code data
-  QRCode? _qr;
+  QRCodeGenerate? _qr;
 
   /// QR Image renderer
   late QRImage _qrImage;

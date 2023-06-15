@@ -1,6 +1,6 @@
 import 'error_correct_level.dart';
 import 'input_too_long_exception.dart';
-import 'qr_code.dart';
+import 'qr_code_generate.dart';
 import 'qr_version.dart';
 
 /// A utility class for validating and pre-rendering QR code data.
@@ -13,13 +13,13 @@ class QRValidator {
     int version = QRVersion.auto,
     int errorCorrectionLevel = QRErrorCorrectLevel.L,
   }) {
-    late final QRCode qrCode;
+    late final QRCodeGenerate qrCode;
     try {
       if (version != QRVersion.auto) {
-        qrCode = QRCode(version, errorCorrectionLevel);
+        qrCode = QRCodeGenerate(version, errorCorrectionLevel);
         qrCode.addData(data);
       } else {
-        qrCode = QRCode.fromData(
+        qrCode = QRCodeGenerate.fromData(
           data: data,
           errorCorrectLevel: errorCorrectionLevel,
         );
@@ -51,7 +51,7 @@ class QRValidationResult {
   QRValidationStatus status;
 
   /// The rendered QR code data / object.
-  QRCode? qrCode;
+  QRCodeGenerate? qrCode;
 
   /// The exception that was thrown in the event of a non-valid result (if any).
   Exception? error;

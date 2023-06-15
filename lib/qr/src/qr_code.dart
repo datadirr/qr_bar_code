@@ -1,250 +1,325 @@
-import 'dart:math' as math;
-import 'dart:typed_data';
-import 'bit_buffer.dart';
-import 'byte.dart';
+import 'dart:async';
+import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
 import 'error_correct_level.dart';
-import 'input_too_long_exception.dart';
-import 'math.dart' as qr_math;
-import 'mode.dart' as qr_mode;
-import 'polynomial.dart';
-import 'rs_block.dart';
+import 'qr_code_generate.dart';
+import 'qr_painter.dart';
+import 'qr_version.dart';
+import 'types.dart';
+import 'validator.dart';
 
-class QRCode {
-  final int typeNumber;
-  final int errorCorrectLevel;
-  final int moduleCount;
-  List<int>? _dataCache;
-  final _dataList = <QRDatum>[];
-
-  QRCode(this.typeNumber, this.errorCorrectLevel)
-      : moduleCount = typeNumber * 4 + 17 {
-    RangeError.checkValueInInterval(typeNumber, 1, 40, 'typeNumber');
-    RangeError.checkValidIndex(
-      errorCorrectLevel,
-      QRErrorCorrectLevel.levels,
-      'errorCorrectLevel',
-    );
-  }
-
-  factory QRCode.fromData({
+/// A widget that shows a QR code.
+class QRCode extends StatefulWidget {
+  /// Create a new QR code using the [String] data and the passed options (or
+  /// using the default options).
+  QRCode({
     required String data,
-    required int errorCorrectLevel,
-  }) {
-    final typeNumber = _calculateTypeNumberFromData(
-      errorCorrectLevel,
-      [QrByte(data)],
-    );
-    return QRCode(typeNumber, errorCorrectLevel)..addData(data);
-  }
+    super.key,
+    this.size,
+    this.padding = const EdgeInsets.all(10.0),
+    this.backgroundColor = Colors.transparent,
+    this.version = QRVersion.auto,
+    this.errorCorrectionLevel = QRErrorCorrectLevel.L,
+    this.errorStateBuilder,
+    this.constrainErrorBounds = true,
+    this.gapless = true,
+    this.embeddedImage,
+    this.embeddedImageStyle,
+    this.semanticsLabel = 'qr code',
+    this.eyeStyle = const QREyeStyle(
+      eyeShape: QREyeShape.square,
+      color: Colors.black,
+    ),
+    this.dataModuleStyle = const QRDataModuleStyle(
+      dataModuleShape: QRDataModuleShape.square,
+      color: Colors.black,
+    ),
+    this.embeddedImageEmitsError = false,
+    @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
+        this.foregroundColor,
+  })  : assert(
+          QRVersion.isSupportedVersion(version),
+          'QR code version $version is not supported',
+        ),
+        _data = data,
+        _qrCode = null;
 
-  factory QRCode.fromUint8List({
-    required Uint8List data,
-    required int errorCorrectLevel,
-  }) {
-    final typeNumber = _calculateTypeNumberFromData(
-      errorCorrectLevel,
-      [QrByte.fromUint8List(data)],
-    );
-    return QRCode(typeNumber, errorCorrectLevel)
-      .._addToList(QrByte.fromUint8List(data));
-  }
+  /// Create a new QR code using the [QRCodeGenerate] data and the passed options (or
+  /// using the default options).
+  QRCode.withQr({
+    required QRCodeGenerate qr,
+    super.key,
+    this.size,
+    this.padding = const EdgeInsets.all(10.0),
+    this.backgroundColor = Colors.transparent,
+    this.version = QRVersion.auto,
+    this.errorCorrectionLevel = QRErrorCorrectLevel.L,
+    this.errorStateBuilder,
+    this.constrainErrorBounds = true,
+    this.gapless = true,
+    this.embeddedImage,
+    this.embeddedImageStyle,
+    this.semanticsLabel = 'qr code',
+    this.eyeStyle = const QREyeStyle(
+      eyeShape: QREyeShape.square,
+      color: Colors.black,
+    ),
+    this.dataModuleStyle = const QRDataModuleStyle(
+      dataModuleShape: QRDataModuleShape.square,
+      color: Colors.black,
+    ),
+    this.embeddedImageEmitsError = false,
+    @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
+        this.foregroundColor,
+  })  : assert(
+          QRVersion.isSupportedVersion(version),
+          'QR code version $version is not supported',
+        ),
+        _data = null,
+        _qrCode = qr;
 
-  static int _calculateTypeNumberFromData(
-    int errorCorrectLevel,
-    List<QRDatum> dataList,
-  ) {
-    int typeNumber;
-    for (typeNumber = 1; typeNumber < 40; typeNumber++) {
-      final rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+  // The data passed to the widget
+  final String? _data;
 
-      final buffer = QRBitBuffer();
-      var totalDataCount = 0;
-      for (var i = 0; i < rsBlocks.length; i++) {
-        totalDataCount += rsBlocks[i].dataCount;
-      }
+  // The QR code data passed to the widget
+  final QRCodeGenerate? _qrCode;
 
-      for (var i = 0; i < dataList.length; i++) {
-        final data = dataList[i];
-        buffer
-          ..put(data.mode, 4)
-          ..put(data.length, _lengthInBits(data.mode, typeNumber));
-        data.write(buffer);
-      }
-      if (buffer.length <= totalDataCount * 8) break;
-    }
-    return typeNumber;
-  }
+  /// The background color of the final QR code widget.
+  final Color backgroundColor;
 
-  void addData(String data) => _addToList(QrByte(data));
+  /// The QR code version to use.
+  final int version;
 
-  void addByteData(ByteData data) => _addToList(QrByte.fromByteData(data));
+  /// The QR code error correction level to use.
+  final int errorCorrectionLevel;
 
-  /// Add QR Numeric Mode data from a string of digits.
+  /// The external padding between the edge of the widget and the content.
+  final EdgeInsets padding;
+
+  /// The intended size of the widget.
+  final double? size;
+
+  /// The callback that is executed in the event of an error so that you can
+  /// interrogate the exception and construct an alternative view to present
+  /// to your user.
+  final QRErrorBuilder? errorStateBuilder;
+
+  /// If `true` then the error widget will be constrained to the boundary of the
+  /// QR widget if it had been valid. If `false` the error widget will grow to
+  /// the size it needs. If the error widget is allowed to grow, your layout may
+  /// jump around (depending on specifics).
   ///
-  /// It is an error if the [numberString] contains anything other than the
-  /// digits 0 through 9.
-  void addNumeric(String numberString) =>
-      _addToList(QrNumeric.fromString(numberString));
+  /// NOTE: Setting a [size] value will override this setting and both the
+  /// content widget and error widget will adhere to the size value.
+  final bool constrainErrorBounds;
 
-  void addAlphaNumeric(String alphaNumeric) =>
-      _addToList(QrAlphaNumeric.fromString(alphaNumeric));
+  /// If set to false, each of the squares in the QR code will have a small
+  /// gap. Default is true.
+  final bool gapless;
 
-  void _addToList(QRDatum data) {
-    _dataList.add(data);
-    _dataCache = null;
-  }
+  /// The image data to embed (as an overlay) in the QR code. The image will
+  /// be added to the center of the QR code.
+  final ImageProvider? embeddedImage;
 
-  List<int> get dataCache =>
-      _dataCache ??= _createData(typeNumber, errorCorrectLevel, _dataList);
+  /// Styling options for the image overlay.
+  final QREmbeddedImageStyle? embeddedImageStyle;
+
+  /// If set to true and there is an error loading the embedded image, the
+  /// [errorStateBuilder] callback will be called (if it is defined). If false,
+  /// the widget will ignore the embedded image and just display the QR code.
+  /// The default is false.
+  final bool embeddedImageEmitsError;
+
+  /// [semanticsLabel] will be used by screen readers to describe the content of
+  /// the qr code.
+  /// Default is 'qr code'.
+  final String semanticsLabel;
+
+  /// Styling option for QR Eye ball and frame.
+  final QREyeStyle eyeStyle;
+
+  /// Styling option for QR data module.
+  final QRDataModuleStyle dataModuleStyle;
+
+  /// The foreground color of the final QR code widget.
+  /*@Deprecated('use colors in eyeStyle and dataModuleStyle instead')*/
+  final Color? foregroundColor;
+
+  @override
+  State<QRCode> createState() => _QRCodeState();
 }
 
-const int _pad0 = 0xEC;
-const int _pad1 = 0x11;
+class _QRCodeState extends State<QRCode> {
+  /// The QR code string data.
+  QRCodeGenerate? _qr;
 
-List<int> _createData(
-  int typeNumber,
-  int errorCorrectLevel,
-  List<QRDatum> dataList,
-) {
-  final rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+  /// The current validation status.
+  late QRValidationResult _validationResult;
 
-  final buffer = QRBitBuffer();
-
-  for (var i = 0; i < dataList.length; i++) {
-    final data = dataList[i];
-    buffer
-      ..put(data.mode, 4)
-      ..put(data.length, _lengthInBits(data.mode, typeNumber));
-    data.write(buffer);
-  }
-
-  var totalDataCount = 0;
-  for (var i = 0; i < rsBlocks.length; i++) {
-    totalDataCount += rsBlocks[i].dataCount;
-  }
-
-  final totalByteCount = totalDataCount * 8;
-  if (buffer.length > totalByteCount) {
-    throw InputTooLongException(buffer.length, totalByteCount);
-  }
-
-  if (buffer.length + 4 <= totalByteCount) {
-    buffer.put(0, 4);
-  }
-
-  // padding
-  while (buffer.length % 8 != 0) {
-    buffer.putBit(false);
-  }
-
-  // padding
-  final bitDataCount = totalDataCount * 8;
-  var count = 0;
-  for (;;) {
-    if (buffer.length >= bitDataCount) {
-      break;
+  @override
+  Widget build(BuildContext context) {
+    if (widget._data != null) {
+      _validationResult = QRValidator.validate(
+        data: widget._data!,
+        version: widget.version,
+        errorCorrectionLevel: widget.errorCorrectionLevel,
+      );
+      _qr = _validationResult.isValid ? _validationResult.qrCode : null;
+    } else if (widget._qrCode != null) {
+      _qr = widget._qrCode;
+      _validationResult =
+          QRValidationResult(status: QRValidationStatus.valid, qrCode: _qr);
     }
-    buffer.put((count++).isEven ? _pad0 : _pad1, 8);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // validation failed, show an error state widget if builder is present.
+        if (!_validationResult.isValid) {
+          return _errorWidget(context, constraints, _validationResult.error);
+        }
+        // no error, build the regular widget
+        final widgetSize =
+            widget.size ?? constraints.biggest.shortestSide;
+        if (widget.embeddedImage != null) {
+          // if requesting to embed an image then we need to load via a
+          // FutureBuilder because the image provider will be async.
+          return FutureBuilder<ui.Image>(
+            future: _loadQrImage(context, widget.embeddedImageStyle),
+            builder: (ctx, snapshot) {
+              if (snapshot.error != null) {
+                debugPrint('snapshot error: ${snapshot.error}');
+                return widget.embeddedImageEmitsError
+                    ? _errorWidget(context, constraints, snapshot.error)
+                    : _qrWidget(null, widgetSize);
+              }
+              if (snapshot.hasData) {
+                debugPrint('loaded image');
+                final loadedImage = snapshot.data;
+                return _qrWidget(loadedImage, widgetSize);
+              } else {
+                return Container();
+              }
+            },
+          );
+        } else {
+          return _qrWidget(null, widgetSize);
+        }
+      },
+    );
   }
 
-  return _createBytes(buffer, rsBlocks);
-}
-
-List<int> _createBytes(QRBitBuffer buffer, List<QRRSBlock> rsBlocks) {
-  var offset = 0;
-
-  var maxDcCount = 0;
-  var maxEcCount = 0;
-
-  final dcData = List<List<int>?>.filled(rsBlocks.length, null);
-  final ecData = List<List<int>?>.filled(rsBlocks.length, null);
-
-  for (var r = 0; r < rsBlocks.length; r++) {
-    final dcCount = rsBlocks[r].dataCount;
-    final ecCount = rsBlocks[r].totalCount - dcCount;
-
-    maxDcCount = math.max(maxDcCount, dcCount);
-    maxEcCount = math.max(maxEcCount, ecCount);
-
-    final dcItem = dcData[r] = Uint8List(dcCount);
-
-    for (var i = 0; i < dcItem.length; i++) {
-      dcItem[i] = 0xff & buffer.getByte(i + offset);
-    }
-    offset += dcCount;
-
-    final rsPoly = _errorCorrectPolynomial(ecCount);
-    final rawPoly = QRPolynomial(dcItem, rsPoly.length - 1);
-
-    final modPoly = rawPoly.mod(rsPoly);
-    final ecItem = ecData[r] = Uint8List(rsPoly.length - 1);
-
-    for (var i = 0; i < ecItem.length; i++) {
-      final modIndex = i + modPoly.length - ecItem.length;
-      ecItem[i] = (modIndex >= 0) ? modPoly[modIndex] : 0;
-    }
+  Widget _qrWidget(ui.Image? image, double edgeLength) {
+    final painter = QRPainter.withQr(
+      qr: _qr!,
+      // ignore: deprecated_member_use_from_same_package
+      color: widget.foregroundColor,
+      gapless: widget.gapless,
+      embeddedImageStyle: widget.embeddedImageStyle,
+      embeddedImage: image,
+      eyeStyle: widget.eyeStyle,
+      dataModuleStyle: widget.dataModuleStyle,
+    );
+    return _QrContentView(
+      edgeLength: edgeLength,
+      backgroundColor: widget.backgroundColor,
+      padding: widget.padding,
+      semanticsLabel: widget.semanticsLabel,
+      child: CustomPaint(painter: painter),
+    );
   }
 
-  final data = <int>[];
-
-  for (var i = 0; i < maxDcCount; i++) {
-    for (var r = 0; r < rsBlocks.length; r++) {
-      if (i < dcData[r]!.length) {
-        data.add(dcData[r]![i]);
-      }
-    }
+  Widget _errorWidget(
+    BuildContext context,
+    BoxConstraints constraints,
+    Object? error,
+  ) {
+    final errorWidget = widget.errorStateBuilder == null
+        ? Container()
+        : widget.errorStateBuilder!(context, error);
+    final errorSideLength = widget.constrainErrorBounds
+        ? widget.size ?? constraints.biggest.shortestSide
+        : constraints.biggest.longestSide;
+    return _QrContentView(
+      edgeLength: errorSideLength,
+      backgroundColor: widget.backgroundColor,
+      padding: widget.padding,
+      semanticsLabel: widget.semanticsLabel,
+      child: errorWidget,
+    );
   }
 
-  for (var i = 0; i < maxEcCount; i++) {
-    for (var r = 0; r < rsBlocks.length; r++) {
-      if (i < ecData[r]!.length) {
-        data.add(ecData[r]![i]);
-      }
-    }
-  }
+  late ImageStreamListener streamListener;
 
-  return data;
-}
+  Future<ui.Image> _loadQrImage(
+    BuildContext buildContext,
+    QREmbeddedImageStyle? style,
+  ) {
+    if (style != null) {}
 
-int _lengthInBits(int mode, int type) {
-  if (1 <= type && type < 10) {
-    // 1 - 9
-    return switch (mode) {
-      qr_mode.modeNumber => 10,
-      qr_mode.modeAlphaNum => 9,
-      qr_mode.mode8bitByte => 8,
-      qr_mode.modeKanji => 8,
-      _ => throw ArgumentError('mode:$mode')
-    };
-  } else if (type < 27) {
-    // 10 - 26
-    return switch (mode) {
-      qr_mode.modeNumber => 12,
-      qr_mode.modeAlphaNum => 11,
-      qr_mode.mode8bitByte => 16,
-      qr_mode.modeKanji => 10,
-      _ => throw ArgumentError('mode:$mode')
-    };
-  } else if (type < 41) {
-    // 27 - 40
-    return switch (mode) {
-      qr_mode.modeNumber => 14,
-      qr_mode.modeAlphaNum => 13,
-      qr_mode.mode8bitByte => 16,
-      qr_mode.modeKanji => 12,
-      _ => throw ArgumentError('mode:$mode')
-    };
-  } else {
-    throw ArgumentError('type:$type');
+    final mq = MediaQuery.of(buildContext);
+    final completer = Completer<ui.Image>();
+    final stream = widget.embeddedImage!.resolve(
+      ImageConfiguration(
+        devicePixelRatio: mq.devicePixelRatio,
+      ),
+    );
+
+    streamListener = ImageStreamListener(
+      (info, err) {
+        stream.removeListener(streamListener);
+        completer.complete(info.image);
+      },
+      onError: (err, _) {
+        stream.removeListener(streamListener);
+        completer.completeError(err);
+      },
+    );
+    stream.addListener(streamListener);
+    return completer.future;
   }
 }
 
-QRPolynomial _errorCorrectPolynomial(int errorCorrectLength) {
-  var a = QRPolynomial([1], 0);
+/// A function type to be called when any form of error occurs while
+/// painting a [QRCode].
+typedef QRErrorBuilder = Widget Function(BuildContext context, Object? error);
 
-  for (var i = 0; i < errorCorrectLength; i++) {
-    a = a.multiply(QRPolynomial([1, qr_math.gexp(i)], 0));
+class _QrContentView extends StatelessWidget {
+  const _QrContentView({
+    required this.edgeLength,
+    required this.child,
+    this.backgroundColor,
+    this.padding,
+    this.semanticsLabel,
+  });
+
+  /// The length of both edges (because it has to be a square).
+  final double edgeLength;
+
+  /// The background color of the containing widget.
+  final Color? backgroundColor;
+
+  /// The padding that surrounds the child widget.
+  final EdgeInsets? padding;
+
+  /// The child widget.
+  final Widget child;
+
+  /// [semanticsLabel] will be used by screen readers to describe the content of
+  /// the qr code.
+  final String? semanticsLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: semanticsLabel,
+      child: Container(
+        width: edgeLength,
+        height: edgeLength,
+        color: backgroundColor,
+        child: Padding(
+          padding: padding!,
+          child: child,
+        ),
+      ),
+    );
   }
-
-  return a;
 }

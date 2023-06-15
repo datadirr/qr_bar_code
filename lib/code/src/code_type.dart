@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'aztec.dart';
 import 'barcode_exception.dart';
 import 'barcode_operations.dart';
-import 'barcode_types.dart';
+import 'code_generate_type.dart';
 import 'codebar.dart';
 import 'code128.dart';
 import 'code39.dart';
@@ -26,67 +26,67 @@ import 'upce.dart';
 
 /// Barcode generation class
 @immutable
-abstract class Code {
+abstract class CodeType {
   /// Abstract constructor
-  const Code();
+  const CodeType();
 
-  /// Create a specific [Code] instance based on the [CodeType]
+  /// Create a specific [CodeType] instance based on the [CodeGenerateType]
   /// this uses only the default barcode settings.
   /// For finer-grained usage, use the static methods:
   /// * Barcode.code39()
   /// * Barcode.code93()
   /// * Barcode.code128()
   /// * ...
-  factory Code.fromType(CodeType type) {
+  factory CodeType.fromType(CodeGenerateType type) {
     switch (type) {
-      case CodeType.code39:
-        return Code.code39();
-      case CodeType.code93:
-        return Code.code93();
-      case CodeType.code128:
-        return Code.code128();
-      case CodeType.gs128:
-        return Code.gs128();
-      case CodeType.itf:
-        return Code.itf();
-      case CodeType.codeITF14:
-        return Code.itf14();
-      case CodeType.codeITF16:
-        return Code.itf16();
-      case CodeType.codeEAN13:
-        return Code.ean13();
-      case CodeType.codeEAN8:
-        return Code.ean8();
-      case CodeType.codeEAN5:
-        return Code.ean5();
-      case CodeType.codeEAN2:
-        return Code.ean2();
-      case CodeType.codeISBN:
-        return Code.isbn();
-      case CodeType.codeUPCA:
-        return Code.upcA();
-      case CodeType.codeUPCE:
-        return Code.upcE();
-      case CodeType.telepen:
-        return Code.telepen();
-      case CodeType.codeBar:
-        return Code.codeBar();
-      case CodeType.rm4scc:
-        return Code.rm4scc();
-      case CodeType.qrCode:
-        return Code.qrCode();
-      case CodeType.pdf417:
-        return Code.pdf417();
-      case CodeType.dataMatrix:
-        return Code.dataMatrix();
-      case CodeType.aztec:
-        return Code.aztec();
+      case CodeGenerateType.code39:
+        return CodeType.code39();
+      case CodeGenerateType.code93:
+        return CodeType.code93();
+      case CodeGenerateType.code128:
+        return CodeType.code128();
+      case CodeGenerateType.gs128:
+        return CodeType.gs128();
+      case CodeGenerateType.itf:
+        return CodeType.itf();
+      case CodeGenerateType.codeITF14:
+        return CodeType.itf14();
+      case CodeGenerateType.codeITF16:
+        return CodeType.itf16();
+      case CodeGenerateType.codeEAN13:
+        return CodeType.ean13();
+      case CodeGenerateType.codeEAN8:
+        return CodeType.ean8();
+      case CodeGenerateType.codeEAN5:
+        return CodeType.ean5();
+      case CodeGenerateType.codeEAN2:
+        return CodeType.ean2();
+      case CodeGenerateType.codeISBN:
+        return CodeType.isbn();
+      case CodeGenerateType.codeUPCA:
+        return CodeType.upcA();
+      case CodeGenerateType.codeUPCE:
+        return CodeType.upcE();
+      case CodeGenerateType.telepen:
+        return CodeType.telepen();
+      case CodeGenerateType.codeBar:
+        return CodeType.codeBar();
+      case CodeGenerateType.rm4scc:
+        return CodeType.rm4scc();
+      case CodeGenerateType.qrCode:
+        return CodeType.qrCode();
+      case CodeGenerateType.pdf417:
+        return CodeType.pdf417();
+      case CodeGenerateType.dataMatrix:
+        return CodeType.dataMatrix();
+      case CodeGenerateType.aztec:
+        return CodeType.aztec();
       default:
         throw UnimplementedError('Barcode $type not supported');
     }
   }
 
-  /// Code 39 [Code]
+  /// Code 39 [CodeType]
   ///
   /// The Code 39 specification defines 43 characters, consisting of uppercase
   /// letters (A through Z), numeric digits (0 through 9) and a number of special
@@ -95,9 +95,9 @@ abstract class Code {
   /// An additional character (denoted '*') is used for both start and stop
   /// delimiters.
   ///
-  static Code code39() => const BarcodeCode39();
+  static CodeType code39() => const BarcodeCode39();
 
-  /// Code 93 [Code]
+  /// Code 93 [CodeType]
   ///
   /// Code 93 is a barcode symbology designed in 1982 by Intermec to provide
   /// a higher density and data security enhancement to Code 39.
@@ -108,9 +108,9 @@ abstract class Code {
   /// delivery information.
   ///
 
-  static Code code93() => const BarcodeCode93();
+  static CodeType code93() => const BarcodeCode93();
 
-  /// Code128 [Code]
+  /// Code128 [CodeType]
   ///
   /// Code 128 is a high-density linear barcode symbology defined in
   /// ISO/IEC 15417:2007. It is used for alphanumeric or numeric-only barcodes.
@@ -127,7 +127,7 @@ abstract class Code {
   /// Use `"{1}"` for FNC1, `"{2}"` for FNC2, `"{3}"` for FNC3, `"{4}"` for FNC4.
   /// Example: `"Test{1}1233{3}45"` will be equivalent to `Test FNC1 1233 FNC3 45`
   /// for the reader application.
-  static Code code128({
+  static CodeType code128({
     bool useCode128A = true,
     bool useCode128B = true,
     bool useCode128C = true,
@@ -135,7 +135,7 @@ abstract class Code {
   }) =>
       BarcodeCode128(useCode128A, useCode128B, useCode128C, false, escapes);
 
-  /// GS1-128 [Code]
+  /// GS1-128 [CodeType]
   ///
   /// The GS1-128 is an application standard of the GS1.
   ///
@@ -157,7 +157,7 @@ abstract class Code {
   /// Use `"{1}"` for FNC1, `"{2}"` for FNC2, `"{3}"` for FNC3, `"{4}"` for FNC4.
   /// Example: `"Test{1}1233{3}45"` will be equivalent to `Test FNC1 1233 FNC3 45`
   /// for the reader application.
-  static Code gs128({
+  static CodeType gs128({
     bool useCode128A = true,
     bool useCode128B = true,
     bool useCode128C = true,
@@ -178,7 +178,7 @@ abstract class Code {
   ///
   /// [quietWidth] defines the width of the quiet zone before and after
   /// the barcode, inside the border
-  static Code itf14({
+  static CodeType itf14({
     bool drawBorder = true,
     double? borderWidth,
     double? quietWidth,
@@ -198,7 +198,7 @@ abstract class Code {
   ///
   /// [quietWidth] defines the width of the quiet zone before and after
   /// the barcode, inside the border
-  static Code itf16({
+  static CodeType itf16({
     bool drawBorder = true,
     double? borderWidth,
     double? quietWidth,
@@ -225,7 +225,7 @@ abstract class Code {
   ///
   /// [fixedLength] defines the barcode length if the length is to be fixed.
   /// Set to null for not fixed length.
-  static Code itf({
+  static CodeType itf({
     bool addChecksum = false,
     bool zeroPrepend = false,
     bool drawBorder = false,
@@ -244,7 +244,7 @@ abstract class Code {
   /// from a specific manufacturer.
   ///
   /// [drawEndChar] draws the end char '>' in the right margin
-  static Code ean13({bool drawEndChar = false}) => BarcodeEan13(drawEndChar);
+  static CodeType ean13({bool drawEndChar = false}) => BarcodeEan13(drawEndChar);
 
   /// EAN 8 Barcode
   ///
@@ -256,20 +256,20 @@ abstract class Code {
   /// each of the left and right halves.
   ///
   /// [drawSpacers] draws the start '<' and end '>' chars in the left and right margins
-  static Code ean8({bool drawSpacers = false}) => BarcodeEan8(drawSpacers);
+  static CodeType ean8({bool drawSpacers = false}) => BarcodeEan8(drawSpacers);
 
   /// EAN 5 Barcode
   ///
   /// The EAN-5 is a 5-digit European Article Number code, and is a supplement
   /// to the EAN-13 barcode used on books. It is used to give a suggestion
   /// for the price of the book.
-  static Code ean5() => const BarcodeEan5();
+  static CodeType ean5() => const BarcodeEan5();
 
   /// EAN 2 Barcode
   ///
   /// The EAN-2 is a supplement to the EAN-13 and UPC-A barcodes.
   /// It is often used on magazines and periodicals to indicate an issue number.
-  static Code ean2() => const BarcodeEan2();
+  static CodeType ean2() => const BarcodeEan2();
 
   /// ISBN Barcode
   ///
@@ -280,7 +280,7 @@ abstract class Code {
   /// [drawEndChar] draws the end char '>' in the right margin
   ///
   /// [drawIsbn] draws the ISBN number as text on the top of the barcode
-  static Code isbn({bool drawEndChar = false, bool drawIsbn = true}) =>
+  static CodeType isbn({bool drawEndChar = false, bool drawIsbn = true}) =>
       BarcodeIsbn(drawEndChar, drawIsbn);
 
   /// UPC-A Barcode
@@ -289,7 +289,7 @@ abstract class Code {
   /// the United States, Canada, Europe, Australia, New Zealand, and other
   /// countries for tracking trade items in stores. UPC consists of 12 numeric
   /// digits that are uniquely assigned to each trade item.
-  static Code upcA() => const BarcodeUpcA();
+  static CodeType upcA() => const BarcodeUpcA();
 
   /// UPC-E Barcode
   ///
@@ -302,14 +302,14 @@ abstract class Code {
   /// and all leading zeros in the product code, are suppressed.
   ///
   /// [fallback] fallback to UPC-A if the code cannot be converted to UPC-E
-  static Code upcE({bool fallback = false}) => BarcodeUpcE(fallback);
+  static CodeType upcE({bool fallback = false}) => BarcodeUpcE(fallback);
 
   /// Telepen Barcode
   ///
   /// Telepen is a barcode designed in 1972 in the UK to express all 128 ASCII
   /// characters without using shift characters for code switching, and using
   /// only two different widths for bars and spaces.
-  static Code telepen() => const BarcodeTelepen();
+  static CodeType telepen() => const BarcodeTelepen();
 
   /// QR Code
   ///
@@ -320,7 +320,7 @@ abstract class Code {
   /// [typeNumber] QR code version number 1 to 40
   ///
   /// [errorCorrectLevel] is the QR Code Correction Level
-  static Code qrCode(
+  static CodeType qrCode(
           {int? typeNumber,
           BarcodeQRCorrectionLevel errorCorrectLevel =
               BarcodeQRCorrectionLevel.low}) =>
@@ -336,7 +336,7 @@ abstract class Code {
   /// [moduleHeight] defines the height of the bars
   ///
   /// [preferredRatio] defines the width to height ratio
-  static Code pdf417({
+  static CodeType pdf417({
     Pdf417SecurityLevel securityLevel = Pdf417SecurityLevel.level2,
     double moduleHeight = 2.0,
     double preferredRatio = 3.0,
@@ -359,7 +359,7 @@ abstract class Code {
   /// [explicitStartStop] explicitly specify the Start and Stop characters
   /// as letters (ABCDETN*) in the data. In this case, start and stop
   /// settings are ignored
-  static Code codeBar({
+  static CodeType codeBar({
     BarcodeCodeBarStartStop start = BarcodeCodeBarStartStop.A,
     BarcodeCodeBarStartStop stop = BarcodeCodeBarStartStop.B,
     bool printStartStop = false,
@@ -372,7 +372,7 @@ abstract class Code {
   /// The RM4SCC is used for the Royal Mail Cleanmail service. It enables UK
   /// postcodes as well as Delivery Point Suffixes (DPSs) to be easily read by
   /// a machine at high speed.
-  static Code rm4scc() => const BarcodeRm4scc();
+  static CodeType rm4scc() => const BarcodeRm4scc();
 
   /// Data Matrix
   ///
@@ -381,7 +381,7 @@ abstract class Code {
   /// known as a matrix.
   ///
   /// Use [DataMatrixEncoder] to generate GS1 codes.
-  static Code dataMatrix() => const BarcodeDataMatrix();
+  static CodeType dataMatrix() => const BarcodeDataMatrix();
 
   /// Aztec
   ///
@@ -391,7 +391,7 @@ abstract class Code {
   /// [minECCPercent] defines the error correction percentage
   ///
   /// [userSpecifiedLayers] defines the number of layers
-  static Code aztec(
+  static CodeType aztec(
           {int minECCPercent = BarcodeAztec.defaultEcPercent,
           int userSpecifiedLayers = BarcodeAztec.defaultLayers}) =>
       BarcodeAztec(minECCPercent, userSpecifiedLayers);
@@ -631,18 +631,18 @@ abstract class Code {
     return output.toString();
   }
 
-  /// Returns the list of accepted codePoints for this [Code]
+  /// Returns the list of accepted codePoints for this [CodeType]
   Iterable<int> get charSet;
 
-  /// Returns the name of this [Code]
+  /// Returns the name of this [CodeType]
   String get name;
 
   static const int _infiniteMaxLength = 1000;
 
-  /// Returns maximum number of characters this [Code] can encode
+  /// Returns maximum number of characters this [CodeType] can encode
   int get maxLength => _infiniteMaxLength;
 
-  /// Returns minimum number of characters this [Code] can encode
+  /// Returns minimum number of characters this [CodeType] can encode
   int get minLength => 1;
 
   @override

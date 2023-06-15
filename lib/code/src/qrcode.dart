@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'barcode_2d.dart';
-import '../../qr/qr_generate.dart';
+import '../../qr/qr.dart';
 
 /// QR Code Correction Level
 enum BarcodeQRCorrectionLevel {
@@ -40,8 +40,8 @@ class BarcodeQR extends Barcode2D {
     final errorLevel = QRErrorCorrectLevel.levels[errorCorrectLevel.index];
 
     final qrCode = typeNumber == null
-        ? QRCode.fromUint8List(data: data, errorCorrectLevel: errorLevel)
-        : (QRCode(typeNumber!, errorLevel)
+        ? QRCodeGenerate.fromUint8List(data: data, errorCorrectLevel: errorLevel)
+        : (QRCodeGenerate(typeNumber!, errorLevel)
           ..addByteData(data.buffer.asByteData()));
 
     final qrImage = QRImage(qrCode);

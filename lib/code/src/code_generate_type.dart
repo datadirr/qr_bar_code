@@ -1,5 +1,5 @@
-/// Supported barcode types
-enum CodeType {
+/// Supported code types
+enum CodeGenerateType {
   /// ITF16 Barcode
   codeITF16,
 
@@ -45,13 +45,13 @@ enum CodeType {
   /// QR Code
   qrCode,
 
-  /// Codabar
+  /// Code Bar
   codeBar,
 
-  /// Pdf417
+  /// PDF 417
   pdf417,
 
-  /// Datamatrix
+  /// Data Matrix
   dataMatrix,
 
   /// Aztec

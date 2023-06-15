@@ -1,20 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'code.dart';
+import 'code_type.dart';
 import 'painter.dart';
 
 /// Error builder callback
 typedef BarcodeErrorBuilder = Widget Function(
     BuildContext context, String error);
 
-/// Flutter widget to draw a [Code] on screen.
-class CodeGenerate extends StatelessWidget {
+/// Flutter widget to draw a [CodeType] on screen.
+class Code extends StatelessWidget {
   /// Draw a barcode on screen
-  const CodeGenerate({
+  const Code({
     Key? key,
     required String data,
-    required this.code,
+    required this.codeType,
     this.color = Colors.black,
     this.backgroundColor,
     this.decoration,
@@ -31,10 +31,10 @@ class CodeGenerate extends StatelessWidget {
         super(key: key);
 
   /// Draw a barcode on screen using Uint8List data
-  const CodeGenerate.fromBytes({
+  const Code.fromBytes({
     Key? key,
     required Uint8List data,
-    required this.code,
+    required this.codeType,
     this.color = Colors.black,
     this.backgroundColor,
     this.decoration,
@@ -64,7 +64,7 @@ class CodeGenerate extends StatelessWidget {
   ///   * Code.code128()
   ///   * Code.ean13()
   ///   * ...
-  final Code code;
+  final CodeType codeType;
 
   /// The bars color
   /// should be black or really dark color
@@ -112,7 +112,7 @@ class CodeGenerate extends StatelessWidget {
     Widget child = isBytes
         ? BarcodePainter.fromBytes(
             _dataBytes,
-            code,
+            codeType,
             color,
             drawText,
             effectiveTextStyle,
@@ -120,7 +120,7 @@ class CodeGenerate extends StatelessWidget {
           )
         : BarcodePainter(
             _dataString,
-            code,
+            codeType,
             color,
             drawText,
             effectiveTextStyle,
@@ -130,9 +130,9 @@ class CodeGenerate extends StatelessWidget {
     if (errorBuilder != null) {
       try {
         if (isBytes) {
-          code.verifyBytes(_dataBytes!);
+          codeType.verifyBytes(_dataBytes!);
         } else {
-          code.verify(_dataString!);
+          codeType.verify(_dataString!);
         }
       } catch (e) {
         child = errorBuilder!(context, e.toString());

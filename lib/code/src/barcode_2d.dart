@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'code.dart';
+import 'code_type.dart';
 import 'barcode_exception.dart';
 import 'barcode_operations.dart';
 
@@ -39,7 +39,7 @@ class Barcode2DMatrix {
 }
 
 /// Two Dimension Barcode generation class
-abstract class Barcode2D extends Code {
+abstract class Barcode2D extends CodeType {
   /// Create a [Barcode2D] object
   const Barcode2D();
 

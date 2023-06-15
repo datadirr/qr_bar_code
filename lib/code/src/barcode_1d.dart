@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'code.dart';
+import 'code_type.dart';
 import 'barcode_operations.dart';
 
 /// One Dimension Barcode generation class
-abstract class Barcode1D extends Code {
+abstract class Barcode1D extends CodeType {
   /// Create a [Barcode1D] object
   const Barcode1D();
 

@@ -4,7 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'code.dart';
+import 'code_type.dart';
 import 'barcode_exception.dart';
 import 'barcode_operations.dart';
 
@@ -43,7 +43,7 @@ class BarcodePainter extends LeafRenderObjectWidget {
   bool get isBytes => _dataBytes != null;
 
   /// The barcode rendering object
-  final Code barcode;
+  final CodeType barcode;
 
   /// The color of the barcode elements, usually black
   final Color color;
@@ -113,7 +113,7 @@ class RenderBarcode extends RenderBox {
   /// Is this raw bytes
   bool get isBytes => dataBytes != null;
 
-  Code barcode;
+  CodeType barcode;
 
   Paint barStyle;
 

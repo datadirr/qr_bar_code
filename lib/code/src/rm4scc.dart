@@ -1,4 +1,4 @@
-import '../code_generate.dart';
+import '../code.dart';
 import 'barcode_hm.dart';
 import 'barcode_maps.dart';
 

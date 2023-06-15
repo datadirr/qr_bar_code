@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'mask_pattern.dart' as qr_mask_pattern;
-import 'qr_code.dart';
+import 'qr_code_generate.dart';
 import 'util.dart' as qr_util;
 
-/// Renders the encoded data from a [QRCode] in a portable format.
+/// Renders the encoded data from a [QRCodeGenerate] in a portable format.
 class QRImage {
   final int moduleCount;
   final int typeNumber;
@@ -13,7 +13,7 @@ class QRImage {
   final _modules = <List<bool?>>[];
 
   /// Generates a QrImage with the best mask pattern encoding [qrCode].
-  factory QRImage(QRCode qrCode) {
+  factory QRImage(QRCodeGenerate qrCode) {
     var minLostPoint = 0.0;
     QRImage? bestImage;
 
@@ -31,7 +31,7 @@ class QRImage {
   }
 
   /// Generates a specific image for the [qrCode] and [maskPattern].
-  QRImage.withMaskPattern(QRCode qrCode, this.maskPattern)
+  QRImage.withMaskPattern(QRCodeGenerate qrCode, this.maskPattern)
       : assert(maskPattern >= 0 && maskPattern <= 7),
         moduleCount = qrCode.moduleCount,
         typeNumber = qrCode.typeNumber,
@@ -39,7 +39,7 @@ class QRImage {
     _makeImpl(maskPattern, qrCode.dataCache, false);
   }
 
-  QRImage._test(QRCode qrCode, this.maskPattern)
+  QRImage._test(QRCodeGenerate qrCode, this.maskPattern)
       : moduleCount = qrCode.moduleCount,
         typeNumber = qrCode.typeNumber,
         errorCorrectLevel = qrCode.errorCorrectLevel {
