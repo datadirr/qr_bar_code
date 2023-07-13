@@ -244,7 +244,8 @@ abstract class CodeType {
   /// from a specific manufacturer.
   ///
   /// [drawEndChar] draws the end char '>' in the right margin
-  static CodeType ean13({bool drawEndChar = false}) => BarcodeEan13(drawEndChar);
+  static CodeType ean13({bool drawEndChar = false}) =>
+      BarcodeEan13(drawEndChar);
 
   /// EAN 8 Barcode
   ///
