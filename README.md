@@ -42,3 +42,11 @@ Code(data: "https://datadirr.com", codeType: CodeType.qrCode())
 ```dart
 QRCode(data: "https://datadirr.com")
 ```
+
+
+# Outro
+## Credits
+Thanks to Luke Freeman for his awesome [qr.flutter](https://github.com/theyakka/qr.flutter) library.
+Thanks to Kevin Moore for his awesome [qr.dart](https://github.com/kevmoo/qr.dart) library. It's the core of this library.
+
+For author/contributor information, see the `AUTHORS` file.
