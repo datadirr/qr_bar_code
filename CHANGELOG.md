@@ -1,3 +1,7 @@
+## 1.3.0
+
+* Simple and fast QR code and Barcode generator and scanner with smartphones.
+
 ## 1.2.0
 
 * Simple and fast QR code and Barcode generator and scanner with smartphones.
