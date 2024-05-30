@@ -8,7 +8,7 @@ import 'ean13.dart';
 /// from an affiliate of the International ISBN Agency.
 class BarcodeIsbn extends BarcodeEan13 {
   /// Create an ISBN Barcode
-  const BarcodeIsbn(bool drawEndChar, this.drawIsbn) : super(drawEndChar);
+  const BarcodeIsbn(super.drawEndChar, this.drawIsbn);
 
   /// Draw the ISBN number as text on the top of the barcode
   final bool drawIsbn;

@@ -616,7 +616,7 @@ abstract class _Token {
 }
 
 class _SimpleToken extends _Token {
-  _SimpleToken(_Token? prev, this.value, this.bitCount) : super(prev);
+  _SimpleToken(super.prev, this.value, this.bitCount);
 
   final int value;
   final int bitCount;
@@ -628,8 +628,7 @@ class _SimpleToken extends _Token {
 }
 
 class _BinaryShiftToken extends _Token {
-  _BinaryShiftToken(_Token? prev, this.bShiftStart, this.bShiftByteCnt)
-      : super(prev);
+  _BinaryShiftToken(super.prev, this.bShiftStart, this.bShiftByteCnt);
 
   final int bShiftStart;
   final int bShiftByteCnt;

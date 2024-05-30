@@ -18,9 +18,8 @@ class BarcodePainter extends LeafRenderObjectWidget {
     this.drawText,
     this.style,
     this.textPadding, {
-    Key? key,
-  })  : _dataBytes = null,
-        super(key: key);
+    super.key,
+  }) : _dataBytes = null;
 
   const BarcodePainter.fromBytes(
     this._dataBytes,
@@ -29,9 +28,8 @@ class BarcodePainter extends LeafRenderObjectWidget {
     this.drawText,
     this.style,
     this.textPadding, {
-    Key? key,
-  })  : _dataString = null,
-        super(key: key);
+    super.key,
+  }) : _dataString = null;
 
   /// The Data to include in the barcode
   final Uint8List? _dataBytes;

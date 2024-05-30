@@ -12,7 +12,7 @@ typedef BarcodeErrorBuilder = Widget Function(
 class Code extends StatelessWidget {
   /// Draw a barcode on screen
   const Code({
-    Key? key,
+    super.key,
     required String data,
     required this.codeType,
     this.color = Colors.black,
@@ -27,12 +27,11 @@ class Code extends StatelessWidget {
     this.textPadding = 5,
     this.errorBuilder,
   })  : _dataBytes = null,
-        _dataString = data,
-        super(key: key);
+        _dataString = data;
 
   /// Draw a barcode on screen using Uint8List data
   const Code.fromBytes({
-    Key? key,
+    super.key,
     required Uint8List data,
     required this.codeType,
     this.color = Colors.black,
@@ -47,8 +46,7 @@ class Code extends StatelessWidget {
     this.textPadding = 5,
     this.errorBuilder,
   })  : _dataBytes = data,
-        _dataString = null,
-        super(key: key);
+        _dataString = null;
 
   /// The barcode data to display
   final Uint8List? _dataBytes;

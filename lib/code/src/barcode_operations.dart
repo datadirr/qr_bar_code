@@ -34,17 +34,12 @@ class BarcodeElement {
 class BarcodeBar extends BarcodeElement {
   /// Create a rectangle drawing operation to draw a white or black unit
   const BarcodeBar({
-    required double left,
-    required double top,
-    required double width,
-    required double height,
+    required super.left,
+    required super.top,
+    required super.width,
+    required super.height,
     required this.black,
-  }) : super(
-          left: left,
-          top: top,
-          width: width,
-          height: height,
-        );
+  });
 
   /// Black or white color of this rectangle
   final bool black;
@@ -70,18 +65,13 @@ enum BarcodeTextAlign {
 class BarcodeText extends BarcodeElement {
   /// Create a ext drawing operation
   const BarcodeText({
-    required double left,
-    required double top,
-    required double width,
-    required double height,
+    required super.left,
+    required super.top,
+    required super.width,
+    required super.height,
     required this.text,
     required this.align,
-  }) : super(
-          left: left,
-          top: top,
-          width: width,
-          height: height,
-        );
+  });
 
   /// Text to display in this rectangle
   final String text;

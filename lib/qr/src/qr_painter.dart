@@ -280,8 +280,7 @@ class QRPainter extends CustomPainter {
         embeddedImage!.width.toDouble(),
         embeddedImage!.height.toDouble(),
       );
-      final requestedSize =
-          embeddedImageStyle != null ? embeddedImageStyle!.size : null;
+      final requestedSize = embeddedImageStyle?.size;
       final imageSize = _scaledAspectSize(size, originalSize, requestedSize);
       final position = Offset(
         (size.width - imageSize.width) / 2.0,
