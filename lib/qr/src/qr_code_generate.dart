@@ -17,7 +17,7 @@ class QRCodeGenerate {
   final _dataList = <QRDatum>[];
 
   QRCodeGenerate(this.typeNumber, this.errorCorrectLevel)
-      : moduleCount = typeNumber * 4 + 17 {
+    : moduleCount = typeNumber * 4 + 17 {
     RangeError.checkValueInInterval(typeNumber, 1, 40, 'typeNumber');
     RangeError.checkValidIndex(
       errorCorrectLevel,
@@ -30,10 +30,9 @@ class QRCodeGenerate {
     required String data,
     required int errorCorrectLevel,
   }) {
-    final typeNumber = _calculateTypeNumberFromData(
-      errorCorrectLevel,
-      [QrByte(data)],
-    );
+    final typeNumber = _calculateTypeNumberFromData(errorCorrectLevel, [
+      QrByte(data),
+    ]);
     return QRCodeGenerate(typeNumber, errorCorrectLevel)..addData(data);
   }
 
@@ -41,10 +40,9 @@ class QRCodeGenerate {
     required Uint8List data,
     required int errorCorrectLevel,
   }) {
-    final typeNumber = _calculateTypeNumberFromData(
-      errorCorrectLevel,
-      [QrByte.fromUint8List(data)],
-    );
+    final typeNumber = _calculateTypeNumberFromData(errorCorrectLevel, [
+      QrByte.fromUint8List(data),
+    ]);
     return QRCodeGenerate(typeNumber, errorCorrectLevel)
       .._addToList(QrByte.fromUint8List(data));
   }
@@ -214,7 +212,7 @@ int _lengthInBits(int mode, int type) {
       qr_mode.modeAlphaNum => 9,
       qr_mode.mode8bitByte => 8,
       qr_mode.modeKanji => 8,
-      _ => throw ArgumentError('mode:$mode')
+      _ => throw ArgumentError('mode:$mode'),
     };
   } else if (type < 27) {
     // 10 - 26
@@ -223,7 +221,7 @@ int _lengthInBits(int mode, int type) {
       qr_mode.modeAlphaNum => 11,
       qr_mode.mode8bitByte => 16,
       qr_mode.modeKanji => 10,
-      _ => throw ArgumentError('mode:$mode')
+      _ => throw ArgumentError('mode:$mode'),
     };
   } else if (type < 41) {
     // 27 - 40
@@ -232,7 +230,7 @@ int _lengthInBits(int mode, int type) {
       qr_mode.modeAlphaNum => 13,
       qr_mode.mode8bitByte => 16,
       qr_mode.modeKanji => 12,
-      _ => throw ArgumentError('mode:$mode')
+      _ => throw ArgumentError('mode:$mode'),
     };
   } else {
     throw ArgumentError('type:$type');

@@ -24,7 +24,8 @@ abstract class BarcodeEan extends Barcode1D {
     } else {
       if (data.length != length) {
         throw BarcodeException(
-            'Unable to encode "$data" to $name Barcode, it is not $length digits');
+          'Unable to encode "$data" to $name Barcode, it is not $length digits',
+        );
       }
 
       final last = data.substring(length - 1);
@@ -32,7 +33,8 @@ abstract class BarcodeEan extends Barcode1D {
 
       if (last != checksum) {
         throw BarcodeException(
-            'Unable to encode "$data" to $name Barcode, checksum "$last" should be "$checksum"');
+          'Unable to encode "$data" to $name Barcode, checksum "$last" should be "$checksum"',
+        );
       }
     }
 
@@ -71,5 +73,7 @@ abstract class BarcodeEan extends Barcode1D {
 
   /// Returns the barcode string with the correct checksum
   String normalize(String data) => checkLength(
-      data.padRight(minLength, '0').substring(0, minLength), maxLength);
+    data.padRight(minLength, '0').substring(0, minLength),
+    maxLength,
+  );
 }

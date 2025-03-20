@@ -128,7 +128,8 @@ class BarcodeItf extends BarcodeEan {
 
       if (data.length % 2 != 0) {
         throw BarcodeException(
-            '$name barcode can only encode an even number of digits.');
+          '$name barcode can only encode an even number of digits.',
+        );
       }
     }
 
@@ -139,12 +140,13 @@ class BarcodeItf extends BarcodeEan {
     for (var i = 0; i < cu.length / 2; i++) {
       final tuple = <int?>[
         BarcodeMaps.itf[cu[i * 2]],
-        BarcodeMaps.itf[cu[i * 2 + 1]]
+        BarcodeMaps.itf[cu[i * 2 + 1]],
       ];
 
       if (tuple[0] == null || tuple[1] == null) {
         throw BarcodeException(
-            'Unable to encode "${String.fromCharCode(cu[i * 2])}${String.fromCharCode(cu[i * 2 + 1])}" to $name Barcode');
+          'Unable to encode "${String.fromCharCode(cu[i * 2])}${String.fromCharCode(cu[i * 2 + 1])}" to $name Barcode',
+        );
       }
 
       for (var n = 0; n < 10; n++) {
@@ -192,23 +194,26 @@ class BarcodeItf extends BarcodeEan {
 
       yield BarcodeBar(left: 0, top: 0, width: width, height: bw, black: true);
       yield BarcodeBar(
-          left: 0,
-          top: height - hp - bw,
-          width: width,
-          height: bw,
-          black: true);
+        left: 0,
+        top: height - hp - bw,
+        width: width,
+        height: bw,
+        black: true,
+      );
       yield BarcodeBar(
-          left: 0,
-          top: bw,
-          width: bw,
-          height: height - hp - bw * 2,
-          black: true);
+        left: 0,
+        top: bw,
+        width: bw,
+        height: height - hp - bw * 2,
+        black: true,
+      );
       yield BarcodeBar(
-          left: width - bw,
-          top: bw,
-          width: bw,
-          height: height - hp - bw * 2,
-          black: true);
+        left: width - bw,
+        top: bw,
+        width: bw,
+        height: height - hp - bw * 2,
+        black: true,
+      );
     }
   }
 
@@ -260,7 +265,8 @@ class BarcodeItf extends BarcodeEan {
 
     if (text.length % 2 != 0) {
       throw BarcodeException(
-          '$name barcode can only encode an even number of digits.');
+        '$name barcode can only encode an even number of digits.',
+      );
     }
 
     super.verifyBytes(utf8.encoder.convert(text));
@@ -270,10 +276,11 @@ class BarcodeItf extends BarcodeEan {
   String normalize(String data) {
     if (fixedLength != null) {
       return checkLength(
-          zeroPrepend
-              ? data.padRight(minLength, '0').substring(0, minLength)
-              : data,
-          maxLength);
+        zeroPrepend
+            ? data.padRight(minLength, '0').substring(0, minLength)
+            : data,
+        maxLength,
+      );
     }
 
     if (zeroPrepend && ((data.length % 2 != 0) != addChecksum)) {

@@ -27,16 +27,19 @@ class QRRSBlock {
   }
 }
 
-List<int> _getRsBlockTable(int typeNumber, int errorCorrectLevel) =>
-    switch (errorCorrectLevel) {
-      QRErrorCorrectLevel.L => _rsBlockTable[(typeNumber - 1) * 4 + 0],
-      QRErrorCorrectLevel.M => _rsBlockTable[(typeNumber - 1) * 4 + 1],
-      QRErrorCorrectLevel.Q => _rsBlockTable[(typeNumber - 1) * 4 + 2],
-      QRErrorCorrectLevel.H => _rsBlockTable[(typeNumber - 1) * 4 + 3],
-      _ => throw ArgumentError(
-          'bad rs block @ typeNumber: $typeNumber/errorCorrectLevel:$errorCorrectLevel',
-        )
-    };
+List<int> _getRsBlockTable(
+  int typeNumber,
+  int errorCorrectLevel,
+) => switch (errorCorrectLevel) {
+  QRErrorCorrectLevel.L => _rsBlockTable[(typeNumber - 1) * 4 + 0],
+  QRErrorCorrectLevel.M => _rsBlockTable[(typeNumber - 1) * 4 + 1],
+  QRErrorCorrectLevel.Q => _rsBlockTable[(typeNumber - 1) * 4 + 2],
+  QRErrorCorrectLevel.H => _rsBlockTable[(typeNumber - 1) * 4 + 3],
+  _ =>
+    throw ArgumentError(
+      'bad rs block @ typeNumber: $typeNumber/errorCorrectLevel:$errorCorrectLevel',
+    ),
+};
 
 const List<List<int>> _rsBlockTable = [
   // L
@@ -281,5 +284,5 @@ const List<List<int>> _rsBlockTable = [
   [19, 148, 118, 6, 149, 119],
   [18, 75, 47, 31, 76, 48],
   [34, 54, 24, 34, 55, 25],
-  [20, 45, 15, 61, 46, 16]
+  [20, 45, 15, 61, 46, 16],
 ];

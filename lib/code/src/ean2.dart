@@ -40,7 +40,8 @@ class BarcodeEan2 extends BarcodeEan {
 
       if (codes == null) {
         throw BarcodeException(
-            'Unable to encode "${String.fromCharCode(code)}" to $name Barcode');
+          'Unable to encode "${String.fromCharCode(code)}" to $name Barcode',
+        );
       }
 
       if (index == 1) {
@@ -59,8 +60,7 @@ class BarcodeEan2 extends BarcodeEan {
     double height,
     double fontHeight,
     double textPadding,
-  ) =>
-      drawText ? fontHeight + textPadding : 0;
+  ) => drawText ? fontHeight + textPadding : 0;
 
   @override
   double getHeight(
@@ -71,8 +71,7 @@ class BarcodeEan2 extends BarcodeEan {
     double fontHeight,
     double textPadding,
     bool drawText,
-  ) =>
-      height;
+  ) => height;
 
   @override
   Iterable<BarcodeElement> makeText(

@@ -5,8 +5,8 @@ import 'code_type.dart';
 import 'painter.dart';
 
 /// Error builder callback
-typedef BarcodeErrorBuilder = Widget Function(
-    BuildContext context, String error);
+typedef BarcodeErrorBuilder =
+    Widget Function(BuildContext context, String error);
 
 /// Flutter widget to draw a [CodeType] on screen.
 class Code extends StatelessWidget {
@@ -26,8 +26,8 @@ class Code extends StatelessWidget {
     this.style,
     this.textPadding = 5,
     this.errorBuilder,
-  })  : _dataBytes = null,
-        _dataString = data;
+  }) : _dataBytes = null,
+       _dataString = data;
 
   /// Draw a barcode on screen using Uint8List data
   const Code.fromBytes({
@@ -45,8 +45,8 @@ class Code extends StatelessWidget {
     this.style,
     this.textPadding = 5,
     this.errorBuilder,
-  })  : _dataBytes = data,
-        _dataString = null;
+  }) : _dataBytes = data,
+       _dataString = null;
 
   /// The barcode data to display
   final Uint8List? _dataBytes;
@@ -107,23 +107,24 @@ class Code extends StatelessWidget {
       effectiveTextStyle = defaultTextStyle.style.merge(style);
     }
 
-    Widget child = isBytes
-        ? BarcodePainter.fromBytes(
-            _dataBytes,
-            codeType,
-            color,
-            drawText,
-            effectiveTextStyle,
-            textPadding,
-          )
-        : BarcodePainter(
-            _dataString,
-            codeType,
-            color,
-            drawText,
-            effectiveTextStyle,
-            textPadding,
-          );
+    Widget child =
+        isBytes
+            ? BarcodePainter.fromBytes(
+              _dataBytes,
+              codeType,
+              color,
+              drawText,
+              effectiveTextStyle,
+              textPadding,
+            )
+            : BarcodePainter(
+              _dataString,
+              codeType,
+              color,
+              drawText,
+              effectiveTextStyle,
+              textPadding,
+            );
 
     if (errorBuilder != null) {
       try {
@@ -142,10 +143,7 @@ class Code extends StatelessWidget {
     }
 
     if (decoration != null) {
-      child = DecoratedBox(
-        decoration: decoration!,
-        child: child,
-      );
+      child = DecoratedBox(decoration: decoration!, child: child);
     } else if (backgroundColor != null) {
       child = DecoratedBox(
         decoration: BoxDecoration(color: backgroundColor),

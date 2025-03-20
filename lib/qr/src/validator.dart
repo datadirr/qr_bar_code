@@ -71,5 +71,5 @@ enum QRValidationStatus {
 
   /// An unknown / unexpected error occurred when we tried to validate the QR
   /// code data.
-  error
+  error,
 }

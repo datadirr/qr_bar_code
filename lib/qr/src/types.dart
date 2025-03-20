@@ -78,10 +78,7 @@ class QREyeStyle {
 @immutable
 class QRDataModuleStyle {
   /// Create a new set of styling options for data modules.
-  const QRDataModuleStyle({
-    this.dataModuleShape,
-    this.color,
-  });
+  const QRDataModuleStyle({this.dataModuleShape, this.color});
 
   /// Eye shape.
   final QRDataModuleShape? dataModuleShape;
@@ -105,10 +102,7 @@ class QRDataModuleStyle {
 @immutable
 class QREmbeddedImageStyle {
   /// Create a new set of styling options.
-  const QREmbeddedImageStyle({
-    this.size,
-    this.color,
-  });
+  const QREmbeddedImageStyle({this.size, this.color});
 
   /// The size of the image. If one dimension is zero then the other dimension
   /// will be used to scale the zero dimension based on the original image

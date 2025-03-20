@@ -37,12 +37,12 @@ class QRCode extends StatefulWidget {
     this.embeddedImageEmitsError = false,
     @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
     this.foregroundColor,
-  })  : assert(
-          QRVersion.isSupportedVersion(version),
-          'QR code version $version is not supported',
-        ),
-        _data = data,
-        _qrCode = null;
+  }) : assert(
+         QRVersion.isSupportedVersion(version),
+         'QR code version $version is not supported',
+       ),
+       _data = data,
+       _qrCode = null;
 
   /// Create a new QR code using the [QRCodeGenerate] data and the passed options (or
   /// using the default options).
@@ -71,12 +71,12 @@ class QRCode extends StatefulWidget {
     this.embeddedImageEmitsError = false,
     @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
     this.foregroundColor,
-  })  : assert(
-          QRVersion.isSupportedVersion(version),
-          'QR code version $version is not supported',
-        ),
-        _data = null,
-        _qrCode = qr;
+  }) : assert(
+         QRVersion.isSupportedVersion(version),
+         'QR code version $version is not supported',
+       ),
+       _data = null,
+       _qrCode = qr;
 
   // The data passed to the widget
   final String? _data;
@@ -167,8 +167,10 @@ class _QRCodeState extends State<QRCode> {
       _qr = _validationResult.isValid ? _validationResult.qrCode : null;
     } else if (widget._qrCode != null) {
       _qr = widget._qrCode;
-      _validationResult =
-          QRValidationResult(status: QRValidationStatus.valid, qrCode: _qr);
+      _validationResult = QRValidationResult(
+        status: QRValidationStatus.valid,
+        qrCode: _qr,
+      );
     }
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -231,12 +233,14 @@ class _QRCodeState extends State<QRCode> {
     BoxConstraints constraints,
     Object? error,
   ) {
-    final errorWidget = widget.errorStateBuilder == null
-        ? Container()
-        : widget.errorStateBuilder!(context, error);
-    final errorSideLength = widget.constrainErrorBounds
-        ? widget.size ?? constraints.biggest.shortestSide
-        : constraints.biggest.longestSide;
+    final errorWidget =
+        widget.errorStateBuilder == null
+            ? Container()
+            : widget.errorStateBuilder!(context, error);
+    final errorSideLength =
+        widget.constrainErrorBounds
+            ? widget.size ?? constraints.biggest.shortestSide
+            : constraints.biggest.longestSide;
     return _QrContentView(
       edgeLength: errorSideLength,
       backgroundColor: widget.backgroundColor,
@@ -257,9 +261,7 @@ class _QRCodeState extends State<QRCode> {
     final mq = MediaQuery.of(buildContext);
     final completer = Completer<ui.Image>();
     final stream = widget.embeddedImage!.resolve(
-      ImageConfiguration(
-        devicePixelRatio: mq.devicePixelRatio,
-      ),
+      ImageConfiguration(devicePixelRatio: mq.devicePixelRatio),
     );
 
     streamListener = ImageStreamListener(
@@ -314,10 +316,7 @@ class _QrContentView extends StatelessWidget {
         width: edgeLength,
         height: edgeLength,
         color: backgroundColor,
-        child: Padding(
-          padding: padding!,
-          child: child,
-        ),
+        child: Padding(padding: padding!, child: child),
       ),
     );
   }

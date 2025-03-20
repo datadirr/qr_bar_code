@@ -5,16 +5,23 @@
 Pod::Spec.new do |s|
   s.name             = 'qr_bar_code'
   s.version          = '0.0.1'
-  s.summary          = 'A QR (Quick Response) code is a type of two dimensional (2D) bar code that is used to provide easy access to online information through the digital camera on a smartphone.'
+  s.summary          = 'A new Flutter project.'
   s.description      = <<-DESC
-A QR (Quick Response) code is a type of two dimensional (2D) bar code that is used to provide easy access to online information through the digital camera on a smartphone.
+A new Flutter project.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
 
   s.source           = { :path => '.' }
-  s.source_files     = 'Classes/**/*'
+  s.source_files = 'Classes/**/*'
+
+  # If your plugin requires a privacy manifest, for example if it collects user
+  # data, update the PrivacyInfo.xcprivacy file to describe your plugin's
+  # privacy impact, and then uncomment this line. For more information,
+  # see https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
+  # s.resource_bundles = {'qr_bar_code_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
+
   s.dependency 'FlutterMacOS'
 
   s.platform = :osx, '10.11'

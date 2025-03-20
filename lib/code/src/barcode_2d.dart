@@ -14,16 +14,16 @@ class Barcode2DMatrix {
     int height,
     double ratio,
     bool Function(int x, int y) isDark,
-  ) =>
-      Barcode2DMatrix(
-          width,
-          height,
-          ratio,
-          Iterable<bool>.generate(width * height, (p) {
-            final x = p % height;
-            final y = p ~/ height;
-            return isDark(y, x);
-          }));
+  ) => Barcode2DMatrix(
+    width,
+    height,
+    ratio,
+    Iterable<bool>.generate(width * height, (p) {
+      final x = p % height;
+      final y = p ~/ height;
+      return isDark(y, x);
+    }),
+  );
 
   /// The width of the matrix
   final int width;

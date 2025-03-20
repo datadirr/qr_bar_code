@@ -58,7 +58,7 @@ enum BarcodeTextAlign {
   center,
 
   /// Align on the middle right
-  right
+  right,
 }
 
 /// Text drawing operation

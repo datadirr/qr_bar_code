@@ -24,10 +24,8 @@ enum BarcodeQRCorrectionLevel {
 /// for the automotive industry in Japan.
 class BarcodeQR extends Barcode2D {
   /// Create a [BarcodeQR] object
-  const BarcodeQR(
-    this.typeNumber,
-    this.errorCorrectLevel,
-  ) : assert(typeNumber == null || (typeNumber >= 1 && typeNumber <= 40));
+  const BarcodeQR(this.typeNumber, this.errorCorrectLevel)
+    : assert(typeNumber == null || (typeNumber >= 1 && typeNumber <= 40));
 
   /// QR code version number 1 to 40
   final int? typeNumber;
@@ -39,11 +37,14 @@ class BarcodeQR extends Barcode2D {
   Barcode2DMatrix convert(Uint8List data) {
     final errorLevel = QRErrorCorrectLevel.levels[errorCorrectLevel.index];
 
-    final qrCode = typeNumber == null
-        ? QRCodeGenerate.fromUint8List(
-            data: data, errorCorrectLevel: errorLevel)
-        : (QRCodeGenerate(typeNumber!, errorLevel)
-          ..addByteData(data.buffer.asByteData()));
+    final qrCode =
+        typeNumber == null
+            ? QRCodeGenerate.fromUint8List(
+              data: data,
+              errorCorrectLevel: errorLevel,
+            )
+            : (QRCodeGenerate(typeNumber!, errorLevel)
+              ..addByteData(data.buffer.asByteData()));
 
     final qrImage = QRImage(qrCode);
 

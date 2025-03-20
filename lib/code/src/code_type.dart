@@ -81,8 +81,6 @@ abstract class CodeType {
         return CodeType.dataMatrix();
       case CodeGenerateType.aztec:
         return CodeType.aztec();
-      default:
-        throw UnimplementedError('Barcode $type not supported');
     }
   }
 
@@ -132,8 +130,7 @@ abstract class CodeType {
     bool useCode128B = true,
     bool useCode128C = true,
     bool escapes = false,
-  }) =>
-      BarcodeCode128(useCode128A, useCode128B, useCode128C, false, escapes);
+  }) => BarcodeCode128(useCode128A, useCode128B, useCode128C, false, escapes);
 
   /// GS1-128 [CodeType]
   ///
@@ -162,8 +159,7 @@ abstract class CodeType {
     bool useCode128B = true,
     bool useCode128C = true,
     bool escapes = false,
-  }) =>
-      BarcodeCode128(useCode128A, useCode128B, useCode128C, true, escapes);
+  }) => BarcodeCode128(useCode128A, useCode128B, useCode128C, true, escapes);
 
   /// ITF-14 Barcode
   ///
@@ -182,8 +178,7 @@ abstract class CodeType {
     bool drawBorder = true,
     double? borderWidth,
     double? quietWidth,
-  }) =>
-      BarcodeItf14(drawBorder, borderWidth, quietWidth);
+  }) => BarcodeItf14(drawBorder, borderWidth, quietWidth);
 
   /// ITF-16 Barcode
   ///
@@ -202,8 +197,7 @@ abstract class CodeType {
     bool drawBorder = true,
     double? borderWidth,
     double? quietWidth,
-  }) =>
-      BarcodeItf16(drawBorder, borderWidth, quietWidth);
+  }) => BarcodeItf16(drawBorder, borderWidth, quietWidth);
 
   /// 2 of 5 Barcode
   ///
@@ -232,9 +226,14 @@ abstract class CodeType {
     double? borderWidth,
     double? quietWidth,
     int? fixedLength,
-  }) =>
-      BarcodeItf(addChecksum, zeroPrepend, drawBorder, borderWidth, quietWidth,
-          fixedLength);
+  }) => BarcodeItf(
+    addChecksum,
+    zeroPrepend,
+    drawBorder,
+    borderWidth,
+    quietWidth,
+    fixedLength,
+  );
 
   /// EAN 13 Barcode
   ///
@@ -321,11 +320,10 @@ abstract class CodeType {
   /// [typeNumber] QR code version number 1 to 40
   ///
   /// [errorCorrectLevel] is the QR Code Correction Level
-  static CodeType qrCode(
-          {int? typeNumber,
-          BarcodeQRCorrectionLevel errorCorrectLevel =
-              BarcodeQRCorrectionLevel.low}) =>
-      BarcodeQR(typeNumber, errorCorrectLevel);
+  static CodeType qrCode({
+    int? typeNumber,
+    BarcodeQRCorrectionLevel errorCorrectLevel = BarcodeQRCorrectionLevel.low,
+  }) => BarcodeQR(typeNumber, errorCorrectLevel);
 
   /// PDF417
   ///
@@ -341,8 +339,7 @@ abstract class CodeType {
     Pdf417SecurityLevel securityLevel = Pdf417SecurityLevel.level2,
     double moduleHeight = 2.0,
     double preferredRatio = 3.0,
-  }) =>
-      BarcodePDF417(securityLevel, moduleHeight, preferredRatio);
+  }) => BarcodePDF417(securityLevel, moduleHeight, preferredRatio);
 
   /// Code Bar Barcode
   ///
@@ -365,8 +362,7 @@ abstract class CodeType {
     BarcodeCodeBarStartStop stop = BarcodeCodeBarStartStop.B,
     bool printStartStop = false,
     bool explicitStartStop = false,
-  }) =>
-      BarcodeCodeBar(start, stop, printStartStop, explicitStartStop);
+  }) => BarcodeCodeBar(start, stop, printStartStop, explicitStartStop);
 
   /// RM4SCC Barcode
   ///
@@ -392,10 +388,10 @@ abstract class CodeType {
   /// [minECCPercent] defines the error correction percentage
   ///
   /// [userSpecifiedLayers] defines the number of layers
-  static CodeType aztec(
-          {int minECCPercent = BarcodeAztec.defaultEcPercent,
-          int userSpecifiedLayers = BarcodeAztec.defaultLayers}) =>
-      BarcodeAztec(minECCPercent, userSpecifiedLayers);
+  static CodeType aztec({
+    int minECCPercent = BarcodeAztec.defaultEcPercent,
+    int userSpecifiedLayers = BarcodeAztec.defaultLayers,
+  }) => BarcodeAztec(minECCPercent, userSpecifiedLayers);
 
   /// Main method to produce the barcode graphic description.
   /// Returns a stream of drawing operations required to properly
@@ -414,15 +410,14 @@ abstract class CodeType {
     bool drawText = false,
     double? fontHeight,
     double? textPadding,
-  }) =>
-      makeBytes(
-        utf8.encoder.convert(data),
-        width: width,
-        height: height,
-        drawText: drawText,
-        fontHeight: fontHeight,
-        textPadding: textPadding,
-      );
+  }) => makeBytes(
+    utf8.encoder.convert(data),
+    width: width,
+    height: height,
+    drawText: drawText,
+    fontHeight: fontHeight,
+    textPadding: textPadding,
+  );
 
   /// Generate the barcode graphic description like [make] but takes a
   /// Uint8List data.
@@ -468,12 +463,14 @@ abstract class CodeType {
   void verifyBytes(Uint8List data) {
     if (data.length > maxLength) {
       throw BarcodeException(
-          'Unable to encode "$data", maximum length is $maxLength for $name Barcode');
+        'Unable to encode "$data", maximum length is $maxLength for $name Barcode',
+      );
     }
 
     if (data.length < minLength) {
       throw BarcodeException(
-          'Unable to encode "$data", minimum length is $minLength for $name Barcode');
+        'Unable to encode "$data", minimum length is $minLength for $name Barcode',
+      );
     }
 
     final chr = charSet.toSet();
@@ -481,7 +478,8 @@ abstract class CodeType {
     for (var code in data) {
       if (!chr.contains(code)) {
         throw BarcodeException(
-            'Unable to encode "${String.fromCharCode(code)}" to $name Barcode');
+          'Unable to encode "${String.fromCharCode(code)}" to $name Barcode',
+        );
       }
     }
   }
@@ -514,8 +512,19 @@ abstract class CodeType {
       textPadding: textPadding,
     );
 
-    return _toSvg(recipe, x, y, width, height, fontFamily, fontHeight,
-        textPadding, color, fullSvg, baseline);
+    return _toSvg(
+      recipe,
+      x,
+      y,
+      width,
+      height,
+      fontFamily,
+      fontHeight,
+      textPadding,
+      color,
+      fullSvg,
+      baseline,
+    );
   }
 
   /// Create an SVG file with this Barcode from Uint8List data
@@ -546,8 +555,19 @@ abstract class CodeType {
       textPadding: textPadding,
     );
 
-    return _toSvg(recipe, x, y, width, height, fontFamily, fontHeight,
-        textPadding, color, fullSvg, baseline);
+    return _toSvg(
+      recipe,
+      x,
+      y,
+      width,
+      height,
+      fontFamily,
+      fontHeight,
+      textPadding,
+      color,
+      fullSvg,
+      baseline,
+    );
   }
 
   String _d(double d) {
@@ -611,19 +631,22 @@ abstract class CodeType {
         }
 
         tSpan.write(
-            '<tspan style="text-anchor: $anchor" x="${_d(lX)}" y="${_d(lY)}">${_s(elem.text)}</tspan>');
+          '<tspan style="text-anchor: $anchor" x="${_d(lX)}" y="${_d(lY)}">${_s(elem.text)}</tspan>',
+        );
       }
     }
 
     final output = StringBuffer();
     if (fullSvg) {
       output.write(
-          '<svg viewBox="${_d(x)} ${_d(y)} ${_d(width)} ${_d(height)}" xmlns="http://www.w3.org/2000/svg">');
+        '<svg viewBox="${_d(x)} ${_d(y)} ${_d(width)} ${_d(height)}" xmlns="http://www.w3.org/2000/svg">',
+      );
     }
 
     output.write('<path d="$path" style="fill: ${_c(color)}"/>');
     output.write(
-        '<text style="fill: ${_c(color)}; font-family: &quot;${_s(fontFamily)}&quot;; font-size: ${_d(fontHeight)}px" x="${_d(x)}" y="${_d(y)}">$tSpan</text>');
+      '<text style="fill: ${_c(color)}; font-family: &quot;${_s(fontFamily)}&quot;; font-size: ${_d(fontHeight)}px" x="${_d(x)}" y="${_d(y)}">$tSpan</text>',
+    );
 
     if (fullSvg) {
       output.write('</svg>');

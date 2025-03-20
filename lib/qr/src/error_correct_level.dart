@@ -10,10 +10,10 @@ class QRErrorCorrectLevel {
   static const List<int> levels = [L, M, Q, H];
 
   static String getName(int level) => switch (level) {
-        L => 'Low',
-        M => 'Medium',
-        Q => 'Quartile',
-        H => 'High',
-        _ => throw ArgumentError('level $level not supported')
-      };
+    L => 'Low',
+    M => 'Medium',
+    Q => 'Quartile',
+    H => 'High',
+    _ => throw ArgumentError('level $level not supported'),
+  };
 }

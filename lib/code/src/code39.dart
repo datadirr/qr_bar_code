@@ -29,7 +29,8 @@ class BarcodeCode39 extends Barcode1D {
       final codeValue = BarcodeMaps.code39[code];
       if (codeValue == null) {
         throw BarcodeException(
-            'Unable to encode "${String.fromCharCode(code)}" to $name Barcode');
+          'Unable to encode "${String.fromCharCode(code)}" to $name Barcode',
+        );
       }
       yield* add(codeValue, BarcodeMaps.code39Len);
     }

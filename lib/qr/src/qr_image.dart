@@ -32,17 +32,17 @@ class QRImage {
 
   /// Generates a specific image for the [qrCode] and [maskPattern].
   QRImage.withMaskPattern(QRCodeGenerate qrCode, this.maskPattern)
-      : assert(maskPattern >= 0 && maskPattern <= 7),
-        moduleCount = qrCode.moduleCount,
-        typeNumber = qrCode.typeNumber,
-        errorCorrectLevel = qrCode.errorCorrectLevel {
+    : assert(maskPattern >= 0 && maskPattern <= 7),
+      moduleCount = qrCode.moduleCount,
+      typeNumber = qrCode.typeNumber,
+      errorCorrectLevel = qrCode.errorCorrectLevel {
     _makeImpl(maskPattern, qrCode.dataCache, false);
   }
 
   QRImage._test(QRCodeGenerate qrCode, this.maskPattern)
-      : moduleCount = qrCode.moduleCount,
-        typeNumber = qrCode.typeNumber,
-        errorCorrectLevel = qrCode.errorCorrectLevel {
+    : moduleCount = qrCode.moduleCount,
+      typeNumber = qrCode.typeNumber,
+      errorCorrectLevel = qrCode.errorCorrectLevel {
     _makeImpl(maskPattern, qrCode.dataCache, true);
   }
 
@@ -236,16 +236,16 @@ class QRImage {
 }
 
 bool _mask(int maskPattern, int i, int j) => switch (maskPattern) {
-      qr_mask_pattern.pattern000 => (i + j).isEven,
-      qr_mask_pattern.pattern001 => i.isEven,
-      qr_mask_pattern.pattern010 => j % 3 == 0,
-      qr_mask_pattern.pattern011 => (i + j) % 3 == 0,
-      qr_mask_pattern.pattern100 => ((i ~/ 2) + (j ~/ 3)).isEven,
-      qr_mask_pattern.pattern101 => (i * j) % 2 + (i * j) % 3 == 0,
-      qr_mask_pattern.pattern110 => ((i * j) % 2 + (i * j) % 3).isEven,
-      qr_mask_pattern.pattern111 => ((i * j) % 3 + (i + j) % 2).isEven,
-      _ => throw ArgumentError('bad maskPattern:$maskPattern')
-    };
+  qr_mask_pattern.pattern000 => (i + j).isEven,
+  qr_mask_pattern.pattern001 => i.isEven,
+  qr_mask_pattern.pattern010 => j % 3 == 0,
+  qr_mask_pattern.pattern011 => (i + j) % 3 == 0,
+  qr_mask_pattern.pattern100 => ((i ~/ 2) + (j ~/ 3)).isEven,
+  qr_mask_pattern.pattern101 => (i * j) % 2 + (i * j) % 3 == 0,
+  qr_mask_pattern.pattern110 => ((i * j) % 2 + (i * j) % 3).isEven,
+  qr_mask_pattern.pattern111 => ((i * j) % 3 + (i + j) % 2).isEven,
+  _ => throw ArgumentError('bad maskPattern:$maskPattern'),
+};
 
 double _lostPoint(QRImage qrImage) {
   final moduleCount = qrImage.moduleCount;

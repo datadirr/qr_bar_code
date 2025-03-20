@@ -76,13 +76,15 @@ class BarcodeCodeBar extends Barcode1D {
     for (var code in data.codeUnits) {
       if (code > 0x40 || code == 0x2a) {
         throw BarcodeException(
-            'Unable to encode "${String.fromCharCode(code)}" to $name Barcode');
+          'Unable to encode "${String.fromCharCode(code)}" to $name Barcode',
+        );
       }
 
       final codeValue = BarcodeMaps.codabar[code];
       if (codeValue == null) {
         throw BarcodeException(
-            'Unable to encode "${String.fromCharCode(code)}" to $name Barcode');
+          'Unable to encode "${String.fromCharCode(code)}" to $name Barcode',
+        );
       }
       final codeLen = BarcodeMaps.codabarLen[code]!;
       yield* add(codeValue, codeLen);
@@ -116,17 +118,20 @@ class BarcodeCodeBar extends Barcode1D {
 
       if (data.length < 3) {
         throw BarcodeException(
-            'Unable to encode $name Barcode: missing start and/or stop chars');
+          'Unable to encode $name Barcode: missing start and/or stop chars',
+        );
       }
 
       if (!validStartStop.contains(data[0])) {
         throw BarcodeException(
-            'Unable to encode $name Barcode: "${String.fromCharCode(data[0])}" is an invalid start char');
+          'Unable to encode $name Barcode: "${String.fromCharCode(data[0])}" is an invalid start char',
+        );
       }
 
       if (!validStartStop.contains(data[data.length - 1])) {
         throw BarcodeException(
-            'Unable to encode $name Barcode: "${String.fromCharCode(data[data.length - 1])}" is an invalid start char');
+          'Unable to encode $name Barcode: "${String.fromCharCode(data[data.length - 1])}" is an invalid start char',
+        );
       }
 
       data = data.sublist(1, data.length - 1);
@@ -145,7 +150,8 @@ class BarcodeCodeBar extends Barcode1D {
     double lineWidth,
   ) {
     if (printStartStop && !explicitStartStop) {
-      data = String.fromCharCode(start.index + 0x41) +
+      data =
+          String.fromCharCode(start.index + 0x41) +
           data +
           String.fromCharCode(stop.index + 0x41);
     } else if (!printStartStop && explicitStartStop) {

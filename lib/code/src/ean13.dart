@@ -47,7 +47,8 @@ class BarcodeEan13 extends BarcodeEan {
     final first = BarcodeMaps.eanFirst[data.codeUnits.first];
     if (first == null) {
       throw BarcodeException(
-          'Unable to encode "${String.fromCharCode(data.codeUnits.first)}" to $name Barcode');
+        'Unable to encode "${String.fromCharCode(data.codeUnits.first)}" to $name Barcode',
+      );
     }
 
     for (var code in data.codeUnits.sublist(1)) {
@@ -55,7 +56,8 @@ class BarcodeEan13 extends BarcodeEan {
 
       if (codes == null) {
         throw BarcodeException(
-            'Unable to encode "${String.fromCharCode(code)}" to $name Barcode');
+          'Unable to encode "${String.fromCharCode(code)}" to $name Barcode',
+        );
       }
 
       if (index == 6) {

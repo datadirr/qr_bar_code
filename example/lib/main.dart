@@ -16,9 +16,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Home(),
-    );
+    return const MaterialApp(home: Home());
   }
 }
 
@@ -34,15 +32,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            QRCode(data: "https://datadirr.com"),
-            Code(data: "https://datadirr.com", codeType: CodeType.qrCode()),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              QRCode(data: "https://datadirr.com"),
+              Code(data: "https://datadirr.com", codeType: CodeType.qrCode()),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

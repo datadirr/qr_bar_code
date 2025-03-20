@@ -70,7 +70,9 @@ class BarcodePainter extends LeafRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, covariant RenderBarcode renderObject) {
+    BuildContext context,
+    covariant RenderBarcode renderObject,
+  ) {
     if (renderObject.dataBytes != _dataBytes ||
         renderObject.dataString != _dataString ||
         renderObject.barcode != barcode ||
@@ -82,9 +84,10 @@ class BarcodePainter extends LeafRenderObjectWidget {
         ..dataBytes = _dataBytes
         ..dataString = _dataString
         ..barcode = barcode
-        ..barStyle = (Paint()
-          ..color = color
-          ..isAntiAlias = false)
+        ..barStyle =
+            (Paint()
+              ..color = color
+              ..isAntiAlias = false)
         ..drawText = drawText
         ..style = style
         ..textPadding = textPadding;
@@ -180,15 +183,17 @@ class RenderBarcode extends RenderBox {
         break;
     }
 
-    final builder = ui.ParagraphBuilder(
-      style!.getParagraphStyle(
-          textAlign: align,
-          fontSize: element.height,
-          maxLines: 1,
-          ellipsis: '...'),
-    )
-      ..pushStyle(style!.getTextStyle())
-      ..addText(element.text);
+    final builder =
+        ui.ParagraphBuilder(
+            style!.getParagraphStyle(
+              textAlign: align,
+              fontSize: element.height,
+              maxLines: 1,
+              ellipsis: '...',
+            ),
+          )
+          ..pushStyle(style!.getTextStyle())
+          ..addText(element.text);
 
     final paragraph = builder.build();
     paragraph.layout(ui.ParagraphConstraints(width: element.width));
@@ -196,11 +201,12 @@ class RenderBarcode extends RenderBox {
     context.canvas.drawParagraph(
       paragraph,
       Offset(
-          offset.dx + element.left,
-          offset.dy +
-              element.top +
-              paragraph.alphabeticBaseline -
-              paragraph.height),
+        offset.dx + element.left,
+        offset.dy +
+            element.top +
+            paragraph.alphabeticBaseline -
+            paragraph.height,
+      ),
     );
   }
 
@@ -213,23 +219,24 @@ class RenderBarcode extends RenderBox {
   @override
   void paint(PaintingContext context, Offset offset) {
     try {
-      final recipe = isBytes
-          ? barcode.makeBytes(
-              dataBytes!,
-              width: size.width,
-              height: size.height,
-              drawText: drawText,
-              fontHeight: style!.fontSize,
-              textPadding: textPadding,
-            )
-          : barcode.make(
-              dataString!,
-              width: size.width,
-              height: size.height,
-              drawText: drawText,
-              fontHeight: style!.fontSize,
-              textPadding: textPadding,
-            );
+      final recipe =
+          isBytes
+              ? barcode.makeBytes(
+                dataBytes!,
+                width: size.width,
+                height: size.height,
+                drawText: drawText,
+                fontHeight: style!.fontSize,
+                textPadding: textPadding,
+              )
+              : barcode.make(
+                dataString!,
+                width: size.width,
+                height: size.height,
+                drawText: drawText,
+                fontHeight: style!.fontSize,
+                textPadding: textPadding,
+              );
       for (var element in recipe) {
         if (element is BarcodeBar) {
           paintBar(context, offset, element);
@@ -238,10 +245,9 @@ class RenderBarcode extends RenderBox {
         }
       }
     } on BarcodeException catch (error) {
-      FlutterError.reportError(FlutterErrorDetails(
-        exception: error,
-        library: 'Barcode Widget',
-      ));
+      FlutterError.reportError(
+        FlutterErrorDetails(exception: error, library: 'Barcode Widget'),
+      );
 
       assert(() {
         drawError(context, offset, error.message);

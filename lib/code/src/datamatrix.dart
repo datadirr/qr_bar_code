@@ -52,12 +52,7 @@ class BarcodeDataMatrix extends Barcode2D {
     text = _ErrorCorrection.ec.calcECC(text, size);
     final code = _render(text, size);
 
-    return Barcode2DMatrix(
-      size.columns,
-      size.rows,
-      1,
-      code,
-    );
+    return Barcode2DMatrix(size.columns, size.rows, 1, code);
   }
 
   @override
@@ -258,18 +253,22 @@ class _CodeLayout {
     }
 
     //solid horizontal line
-    for (var r = size.regionRows() + 1;
-        r < size.rows;
-        r += size.regionRows() + 2) {
+    for (
+      var r = size.regionRows() + 1;
+      r < size.rows;
+      r += size.regionRows() + 2
+    ) {
       for (var c = 0; c < size.columns; c++) {
         setXY(c, r, true);
       }
     }
 
     //dotted vertical lines
-    for (var c = size.regionColumns() + 1;
-        c < size.columns;
-        c += size.regionColumns() + 2) {
+    for (
+      var c = size.regionColumns() + 1;
+      c < size.columns;
+      c += size.regionColumns() + 2
+    ) {
       for (var r = 1; r < size.rows; r += 2) {
         setXY(c, r, true);
       }
@@ -304,8 +303,14 @@ class _CodeLayout {
 }
 
 class _CodeSize {
-  const _CodeSize(this.rows, this.columns, this.regionCountHorizontal,
-      this.regionCountVertical, this.eccCount, this.blockCount);
+  const _CodeSize(
+    this.rows,
+    this.columns,
+    this.regionCountHorizontal,
+    this.regionCountVertical,
+    this.eccCount,
+    this.blockCount,
+  );
 
   final int rows;
   final int columns;
@@ -411,9 +416,11 @@ class _ErrorCorrection {
 
       // and append them to the result
       j = 0;
-      for (var i = block;
-          i < size.errorCorrectionCodewordsPerBlock() * size.blockCount;
-          i += size.blockCount) {
+      for (
+        var i = block;
+        i < size.errorCorrectionCodewordsPerBlock() * size.blockCount;
+        i += size.blockCount
+      ) {
         data[dataSize + i] = ecc[j];
         j++;
       }

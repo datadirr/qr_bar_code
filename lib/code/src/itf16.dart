@@ -9,11 +9,8 @@ import 'itf.dart';
 /// being a check digit.
 class BarcodeItf16 extends BarcodeItf {
   /// Create an ITF-16 Barcode
-  const BarcodeItf16(
-    bool drawBorder,
-    double? borderWidth,
-    double? quietWidth,
-  ) : super(true, true, drawBorder, borderWidth, quietWidth, 16);
+  const BarcodeItf16(bool drawBorder, double? borderWidth, double? quietWidth)
+    : super(true, true, drawBorder, borderWidth, quietWidth, 16);
 
   @override
   String get name => 'ITF 16';

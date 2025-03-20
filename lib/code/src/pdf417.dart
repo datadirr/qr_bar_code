@@ -31,7 +31,7 @@ enum Pdf417SecurityLevel {
   level7,
 
   /// level 8
-  level8
+  level8,
 }
 
 /// PDF417
@@ -41,7 +41,10 @@ enum Pdf417SecurityLevel {
 class BarcodePDF417 extends Barcode2D {
   /// Create a [BarcodePDF417] object
   const BarcodePDF417(
-      this.securityLevel, this.moduleHeight, this.preferredRatio);
+    this.securityLevel,
+    this.moduleHeight,
+    this.preferredRatio,
+  );
 
   static const _minCols = 2;
   static const _maxCols = 60;
@@ -62,7 +65,9 @@ class BarcodePDF417 extends Barcode2D {
     final dataWords = _highlevelEncode(data);
 
     final dim = _calcDimensions(
-        dataWords.length, _errorCorrectionWordCount(securityLevel));
+      dataWords.length,
+      _errorCorrectionWordCount(securityLevel),
+    );
     if (dim.columns < _minCols ||
         dim.columns > _maxCols ||
         dim.rows < _minRows ||
@@ -70,8 +75,11 @@ class BarcodePDF417 extends Barcode2D {
       throw const BarcodeException('Unable to fit data in barcode');
     }
 
-    final codeWords =
-        _encodeData(dataWords.toList(), dim.columns, securityLevel);
+    final codeWords = _encodeData(
+      dataWords.toList(),
+      dim.columns,
+      securityLevel,
+    );
 
     final grid = <List<int>>[];
     for (var i = 0; i < codeWords.length; i += dim.columns) {
@@ -86,15 +94,23 @@ class BarcodePDF417 extends Barcode2D {
       final rowCodes = <int>[];
 
       rowCodes.add(startWord);
-      rowCodes.add(_getCodeword(table,
-          _getLeftCodeWord(rowNum, dim.rows, dim.columns, securityLevel)));
+      rowCodes.add(
+        _getCodeword(
+          table,
+          _getLeftCodeWord(rowNum, dim.rows, dim.columns, securityLevel),
+        ),
+      );
 
       for (final word in row) {
         rowCodes.add(_getCodeword(table, word));
       }
 
-      rowCodes.add(_getCodeword(table,
-          _getRightCodeWord(rowNum, dim.rows, dim.columns, securityLevel)));
+      rowCodes.add(
+        _getCodeword(
+          table,
+          _getRightCodeWord(rowNum, dim.rows, dim.columns, securityLevel),
+        ),
+      );
       rowCodes.add(stopWord);
 
       codes.add(rowCodes);
@@ -122,7 +138,10 @@ class BarcodePDF417 extends Barcode2D {
   int get maxLength => 990;
 
   List<int> _encodeData(
-      List<int> dataWords, int columns, Pdf417SecurityLevel securityLevel) {
+    List<int> dataWords,
+    int columns,
+    Pdf417SecurityLevel securityLevel,
+  ) {
     final dataCount = dataWords.length;
 
     final ecCount = _errorCorrectionWordCount(securityLevel);
@@ -140,7 +159,11 @@ class BarcodePDF417 extends Barcode2D {
   }
 
   int _getLeftCodeWord(
-      int rowNum, int rows, int columns, Pdf417SecurityLevel securityLevel) {
+    int rowNum,
+    int rows,
+    int columns,
+    Pdf417SecurityLevel securityLevel,
+  ) {
     final tableId = rowNum % 3;
 
     late int x;
@@ -162,7 +185,11 @@ class BarcodePDF417 extends Barcode2D {
   }
 
   int _getRightCodeWord(
-      int rowNum, int rows, int columns, Pdf417SecurityLevel securityLevel) {
+    int rowNum,
+    int rows,
+    int columns,
+    Pdf417SecurityLevel securityLevel,
+  ) {
     final tableId = rowNum % 3;
 
     late int x;
@@ -269,7 +296,9 @@ class BarcodePDF417 extends Barcode2D {
   }
 
   List<int> _computeErrorCorrection(
-      Pdf417SecurityLevel level, Iterable<int> data) {
+    Pdf417SecurityLevel level,
+    Iterable<int> data,
+  ) {
     // Correction factors for the given level
     final factors = correctionFactors[level.index];
 
@@ -568,8 +597,11 @@ class BarcodePDF417 extends Barcode2D {
             textSubMode = _SubMode.subUpper;
           }
           final txtData = <int>[];
-          textSubMode =
-              _encodeText(data.sublist(0, textCount), textSubMode, txtData);
+          textSubMode = _encodeText(
+            data.sublist(0, textCount),
+            textSubMode,
+            txtData,
+          );
           yield* txtData;
           data = data.sublist(textCount);
         } else {

@@ -47,27 +47,9 @@ abstract class BarcodeHM extends Barcode1D {
       return;
     }
 
-    final top = marginTop(
-      drawText,
-      width,
-      height,
-      fontHeight,
-      textPadding,
-    );
-    final left = marginLeft(
-      drawText,
-      width,
-      height,
-      fontHeight,
-      textPadding,
-    );
-    final right = marginRight(
-      drawText,
-      width,
-      height,
-      fontHeight,
-      textPadding,
-    );
+    final top = marginTop(drawText, width, height, fontHeight, textPadding);
+    final left = marginLeft(drawText, width, height, fontHeight, textPadding);
+    final right = marginRight(drawText, width, height, fontHeight, textPadding);
     final lineWidth = (width - left - right) / (bars.length * 2 - 1);
     var index = 0;
 

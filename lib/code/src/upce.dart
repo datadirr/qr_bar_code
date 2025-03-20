@@ -42,7 +42,8 @@ class BarcodeUpcE extends BarcodeEan {
 
     if (text.length < 11) {
       throw BarcodeException(
-          'Unable to encode "$text", minimum length is 11 for $name Barcode');
+        'Unable to encode "$text", minimum length is 11 for $name Barcode',
+      );
     }
 
     final upca = checkLength(text, maxLength);
@@ -202,7 +203,8 @@ class BarcodeUpcE extends BarcodeEan {
 
       if (codes == null) {
         throw BarcodeException(
-            'Unable to encode "${String.fromCharCode(code)}" to $name Barcode');
+          'Unable to encode "${String.fromCharCode(code)}" to $name Barcode',
+        );
       }
 
       yield* add(codes[(parity! >> index) & 1 == 0 ? 1 : 0], 7);

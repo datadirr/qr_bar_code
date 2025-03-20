@@ -9,11 +9,8 @@ import 'itf.dart';
 /// The ITF-14 will always encode 14 digits.
 class BarcodeItf14 extends BarcodeItf {
   /// Create an ITF-14 Barcode
-  const BarcodeItf14(
-    bool drawBorder,
-    double? borderWidth,
-    double? quietWidth,
-  ) : super(true, true, drawBorder, borderWidth, quietWidth, 14);
+  const BarcodeItf14(bool drawBorder, double? borderWidth, double? quietWidth)
+    : super(true, true, drawBorder, borderWidth, quietWidth, 14);
 
   @override
   String get name => 'ITF 14';
