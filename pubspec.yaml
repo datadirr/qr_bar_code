@@ -2,7 +2,7 @@ name: qr_bar_code
 description: "Simple and fast QR code and Barcode generator and scanner with smartphones."
 repository: https://github.com/datadirr/qr_bar_code
 homepage: https://datadirr.com
-version: 1.5.0
+version: 2.0.0
 
 environment:
   sdk: ^3.7.2
