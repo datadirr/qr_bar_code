@@ -62,25 +62,22 @@ class BarcodeCode128 extends Barcode1D {
   final bool isGS1;
 
   @override
-  Iterable<int> get charSet =>
-      BarcodeMaps.code128B.keys
-          .where((int x) => useCode128B && x >= 0)
-          .followedBy(
-            BarcodeMaps.code128A.keys.where((int x) => useCode128A && x >= 0),
-          )
-          .followedBy(
-            useCode128C
-                ? List<int>.generate(10, (int index) => index + 0x30)
-                : [],
-          )
-          .followedBy([
-            BarcodeMaps.code128FNC1,
-            if (useCode128A || useCode128B) BarcodeMaps.code128FNC2,
-            if (useCode128A || useCode128B) BarcodeMaps.code128FNC3,
-            if (useCode128A || useCode128B) BarcodeMaps.code128FNC4,
-            if (isGS1) ...[40, 41],
-          ])
-          .toSet();
+  Iterable<int> get charSet => BarcodeMaps.code128B.keys
+      .where((int x) => useCode128B && x >= 0)
+      .followedBy(
+        BarcodeMaps.code128A.keys.where((int x) => useCode128A && x >= 0),
+      )
+      .followedBy(
+        useCode128C ? List<int>.generate(10, (int index) => index + 0x30) : [],
+      )
+      .followedBy([
+        BarcodeMaps.code128FNC1,
+        if (useCode128A || useCode128B) BarcodeMaps.code128FNC2,
+        if (useCode128A || useCode128B) BarcodeMaps.code128FNC3,
+        if (useCode128A || useCode128B) BarcodeMaps.code128FNC4,
+        if (isGS1) ...[40, 41],
+      ])
+      .toSet();
 
   @override
   String get name => isGS1 ? 'GS1 128' : 'CODE 128';

@@ -35,10 +35,9 @@ List<int> _getRsBlockTable(
   QRErrorCorrectLevel.M => _rsBlockTable[(typeNumber - 1) * 4 + 1],
   QRErrorCorrectLevel.Q => _rsBlockTable[(typeNumber - 1) * 4 + 2],
   QRErrorCorrectLevel.H => _rsBlockTable[(typeNumber - 1) * 4 + 3],
-  _ =>
-    throw ArgumentError(
-      'bad rs block @ typeNumber: $typeNumber/errorCorrectLevel:$errorCorrectLevel',
-    ),
+  _ => throw ArgumentError(
+    'bad rs block @ typeNumber: $typeNumber/errorCorrectLevel:$errorCorrectLevel',
+  ),
 };
 
 const List<List<int>> _rsBlockTable = [

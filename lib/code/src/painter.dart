@@ -84,10 +84,9 @@ class BarcodePainter extends LeafRenderObjectWidget {
         ..dataBytes = _dataBytes
         ..dataString = _dataString
         ..barcode = barcode
-        ..barStyle =
-            (Paint()
-              ..color = color
-              ..isAntiAlias = false)
+        ..barStyle = (Paint()
+          ..color = color
+          ..isAntiAlias = false)
         ..drawText = drawText
         ..style = style
         ..textPadding = textPadding;
@@ -219,24 +218,23 @@ class RenderBarcode extends RenderBox {
   @override
   void paint(PaintingContext context, Offset offset) {
     try {
-      final recipe =
-          isBytes
-              ? barcode.makeBytes(
-                dataBytes!,
-                width: size.width,
-                height: size.height,
-                drawText: drawText,
-                fontHeight: style!.fontSize,
-                textPadding: textPadding,
-              )
-              : barcode.make(
-                dataString!,
-                width: size.width,
-                height: size.height,
-                drawText: drawText,
-                fontHeight: style!.fontSize,
-                textPadding: textPadding,
-              );
+      final recipe = isBytes
+          ? barcode.makeBytes(
+              dataBytes!,
+              width: size.width,
+              height: size.height,
+              drawText: drawText,
+              fontHeight: style!.fontSize,
+              textPadding: textPadding,
+            )
+          : barcode.make(
+              dataString!,
+              width: size.width,
+              height: size.height,
+              drawText: drawText,
+              fontHeight: style!.fontSize,
+              textPadding: textPadding,
+            );
       for (var element in recipe) {
         if (element is BarcodeBar) {
           paintBar(context, offset, element);

@@ -107,24 +107,23 @@ class Code extends StatelessWidget {
       effectiveTextStyle = defaultTextStyle.style.merge(style);
     }
 
-    Widget child =
-        isBytes
-            ? BarcodePainter.fromBytes(
-              _dataBytes,
-              codeType,
-              color,
-              drawText,
-              effectiveTextStyle,
-              textPadding,
-            )
-            : BarcodePainter(
-              _dataString,
-              codeType,
-              color,
-              drawText,
-              effectiveTextStyle,
-              textPadding,
-            );
+    Widget child = isBytes
+        ? BarcodePainter.fromBytes(
+            _dataBytes,
+            codeType,
+            color,
+            drawText,
+            effectiveTextStyle,
+            textPadding,
+          )
+        : BarcodePainter(
+            _dataString,
+            codeType,
+            color,
+            drawText,
+            effectiveTextStyle,
+            textPadding,
+          );
 
     if (errorBuilder != null) {
       try {

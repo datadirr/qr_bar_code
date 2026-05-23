@@ -13,7 +13,7 @@ class QRCode extends StatefulWidget {
   /// Create a new QR code using the [String] data and the passed options (or
   /// using the default options).
   QRCode({
-    required String data,
+    required String this._data,
     super.key,
     this.size,
     this.padding = const EdgeInsets.all(10.0),
@@ -41,7 +41,6 @@ class QRCode extends StatefulWidget {
          QRVersion.isSupportedVersion(version),
          'QR code version $version is not supported',
        ),
-       _data = data,
        _qrCode = null;
 
   /// Create a new QR code using the [QRCodeGenerate] data and the passed options (or
@@ -233,14 +232,12 @@ class _QRCodeState extends State<QRCode> {
     BoxConstraints constraints,
     Object? error,
   ) {
-    final errorWidget =
-        widget.errorStateBuilder == null
-            ? Container()
-            : widget.errorStateBuilder!(context, error);
-    final errorSideLength =
-        widget.constrainErrorBounds
-            ? widget.size ?? constraints.biggest.shortestSide
-            : constraints.biggest.longestSide;
+    final errorWidget = widget.errorStateBuilder == null
+        ? Container()
+        : widget.errorStateBuilder!(context, error);
+    final errorSideLength = widget.constrainErrorBounds
+        ? widget.size ?? constraints.biggest.shortestSide
+        : constraints.biggest.longestSide;
     return _QrContentView(
       edgeLength: errorSideLength,
       backgroundColor: widget.backgroundColor,

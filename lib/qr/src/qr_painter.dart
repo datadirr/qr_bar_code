@@ -339,19 +339,17 @@ class QRPainter extends CustomPainter {
     }
 
     // configure the paints
-    final outerPaint =
-        _paintCache.firstPaint(
-          QRCodeElement.finderPatternOuter,
-          position: position,
-        )!;
+    final outerPaint = _paintCache.firstPaint(
+      QRCodeElement.finderPatternOuter,
+      position: position,
+    )!;
     outerPaint.strokeWidth = metrics.pixelSize;
     outerPaint.color = color != null ? color! : eyeStyle.color!;
 
-    final innerPaint =
-        _paintCache.firstPaint(
-          QRCodeElement.finderPatternInner,
-          position: position,
-        )!;
+    final innerPaint = _paintCache.firstPaint(
+      QRCodeElement.finderPatternInner,
+      position: position,
+    )!;
     innerPaint.strokeWidth = metrics.pixelSize;
     innerPaint.color = emptyColor ?? const Color(0x00ffffff);
 
@@ -435,10 +433,9 @@ class QRPainter extends CustomPainter {
     Size size,
     QREmbeddedImageStyle? style,
   ) {
-    final paint =
-        Paint()
-          ..isAntiAlias = true
-          ..filterQuality = FilterQuality.high;
+    final paint = Paint()
+      ..isAntiAlias = true
+      ..filterQuality = FilterQuality.high;
     if (style != null) {
       if (style.color != null) {
         paint.colorFilter = ColorFilter.mode(style.color!, BlendMode.srcATop);

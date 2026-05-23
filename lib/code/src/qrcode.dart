@@ -37,14 +37,13 @@ class BarcodeQR extends Barcode2D {
   Barcode2DMatrix convert(Uint8List data) {
     final errorLevel = QRErrorCorrectLevel.levels[errorCorrectLevel.index];
 
-    final qrCode =
-        typeNumber == null
-            ? QRCodeGenerate.fromUint8List(
-              data: data,
-              errorCorrectLevel: errorLevel,
-            )
-            : (QRCodeGenerate(typeNumber!, errorLevel)
-              ..addByteData(data.buffer.asByteData()));
+    final qrCode = typeNumber == null
+        ? QRCodeGenerate.fromUint8List(
+            data: data,
+            errorCorrectLevel: errorLevel,
+          )
+        : (QRCodeGenerate(typeNumber!, errorLevel)
+            ..addByteData(data.buffer.asByteData()));
 
     final qrImage = QRImage(qrCode);
 
